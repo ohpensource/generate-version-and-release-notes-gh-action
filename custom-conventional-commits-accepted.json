@@ -1,0 +1,30 @@
+[
+    {
+        "commitType": "break",
+        "releaseType": "major"
+    },
+    {
+        "commitType": "major",
+        "releaseType": "major"
+    },
+    {
+        "commitType": "feat",
+        "releaseType": "minor"
+    },
+    {
+        "commitType": "minor",
+        "releaseType": "minor"
+    },
+    {
+        "commitType": "refactor",
+        "releaseType": "patch"
+    },
+    {
+        "commitType": "fix",
+        "releaseType": "patch"
+    },
+    {
+        "commitType": "patch",
+        "releaseType": "patch"
+    }
+]

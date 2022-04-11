@@ -1,0 +1,14 @@
+[
+    {
+        "commitType": "break",
+        "releaseType": "major"
+    },
+    {
+        "commitType": "feat",
+        "releaseType": "minor"
+    },
+    {
+        "commitType": "fix",
+        "releaseType": "patch"
+    }
+]
