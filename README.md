@@ -140,6 +140,19 @@ Follow the next steps to define more conventional commits:
 example fie: [custom-conventional-commits-accepted.json](custom-conventional-commits-accepted.json)
 
 
+# Test this in Windows using WSL Ubuntu
+
+```bash
+CUSTOM_CC_FILE="custom-conventional-commits-accepted.json";
+node validate-custom-cc-types.js $CUSTOM_CC_FILE ;
+
+GITHUB_BASE_REF="main";
+GITHUB_HEAD_REF="LANZ-2249";
+CC_FILE="custom-conventional-commits-accepted.json";
+export DEFAULT_CC="default-conventional-commits-accepted.json";
+node generate-version-and-release-notes.js $GITHUB_BASE_REF $GITHUB_HEAD_REF $CC_FILE;
+```
+
 # License Summary
 
 This code is made available under the MIT license. Details [here](LICENSE).

@@ -12,7 +12,7 @@ logger.logTitle("GENERATE VERSION AND RELEASE NOTES");
 
 const skipGitCommit = process.argv[2];
 const versionPrefix = process.argv[3];
-const customCCFilePath = process.argv[4];
+const customCCFilePath = process.argv[4] || 'not provided';
 const defaultCCFilePath = process.env.DEFAULT_CC
 defaultCCTypes = parseFile(defaultCCFilePath)
 
@@ -30,7 +30,7 @@ const changelogFile = "CHANGELOG.md";
 
 let useCustomCC = false
 let customCCTypes = []
-if (customCCFilePath) {
+if (customCCFilePath !== 'not provided') {
   useCustomCC = true;
   customCCTypes = parseFile(customCCFilePath);
   logger.logKeyValuePair("custom-cc-types", customCCTypes);
@@ -135,26 +135,36 @@ function getUpdatedVersion(version, changes) {
   }
 }
 function getChange(line, commitTypes) {
-  let type = "";
-  let content = "";
+  const convRegex = /(?<type>^[a-z]+)(?<scope>\([a-z,\-]+\))?(?<breaking>!)?(?<colon>:{1})(?<space> {1})(?<subject>.*)/;
+  let matchResult = line.match(convRegex);
+  let changeFields = {
+    type: null,
+    breaking: null,
+    subject: null
+  }
 
-  if (line.split(":").length >= 2) {
-    const prefix = line.split(":")[0].trim();
-    content = line.split(":")[1].trim();
-    const validPrefix = commitTypes.some(x => x.commitType == prefix);
+  if (matchResult)
+    changeFields = matchResult.groups;
 
-    type = validPrefix ? commitTypes
-      .find(x => x.commitType == prefix)
-      .releaseType : "none"
+  let { type, breaking, subject } = changeFields;
 
+  breaking = breaking == '!'
+
+  logger.logKeyValuePair('type', type)
+  logger.logKeyValuePair('breaking', breaking)
+  logger.logKeyValuePair('subject', subject)
+
+  const validPrefix = commitTypes.some(x => x.commitType == type);
+
+  if (validPrefix) {
+    type = breaking ? "major" : commitTypes.find(x => x.commitType == type).releaseType
   } else {
     type = "none"
-    content = line.trim()
   }
 
   return {
     type,
-    content
+    content: subject.trim()
   }
 }
 function getPreviousVersionAsText(versionFileContent) {
