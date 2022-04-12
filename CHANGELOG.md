@@ -1,3 +1,9 @@
+# :confetti_ball: 0.3.0 (2022-04-12T12:54:19.092Z)
+- - -
+## :hammer: Features
+* (js): LANZ-2248 improved workflow to support breaking change exclamation (#6)
+- - -
+- - -
 # :confetti_ball: 0.2.1 (2022-04-12T10:39:37.987Z)
 - - -
 ## :bug: Fixes
