@@ -92,8 +92,24 @@ examples:
 
 ### Remarks about your versioning!
 
-* If your version.json file has a 3 number version (`major.minor.patch`), others prefixes will create a `patch` release.
-* If your has a 4 number version (`major.minor.patch.extra`), others prefixes will increase the `extra` digit.
+* If your version.json file has a 3 number version (`major.minor.patch`), other prefixes will create a `patch` release.
+* If your has a 4 number version (`major.minor.patch.extra`), other prefixes will increase the `extra` digit.
+
+### Conventional Commits support:
+
+* commit scope is supported as: `prefix (scope): msg`
+* breaking change using exclamation mark `!` is supported as `prefix (scope)!: msg`
+
+commit examples:
+
+| Commit message                                         | Release type              |
+| ------------------------------------------------------ | ------------------------- |
+| `fix(js)!: commit type fix but with a breaking change` | major ( exclamation mark) |
+| `fix(js): commit type fix with scope js`               | patch                     |
+| `feat: commit type feat`                               | minor                     |
+| `break: commit type break`                             | major                     |
+| `docs: commit type docs`                               | patch                     |
+| `refactor: commit type refactor`                       | patch                     |
 
 ### You want to use custom conventional commits?
 
@@ -139,6 +155,19 @@ Follow the next steps to define more conventional commits:
 ```
 example fie: [custom-conventional-commits-accepted.json](custom-conventional-commits-accepted.json)
 
+
+# Test this in Windows using WSL Ubuntu
+
+```bash
+CUSTOM_CC_FILE="custom-conventional-commits-accepted.json";
+node validate-custom-cc-types.js $CUSTOM_CC_FILE ;
+
+GITHUB_BASE_REF="main";
+GITHUB_HEAD_REF="LANZ-2249";
+CC_FILE="custom-conventional-commits-accepted.json";
+export DEFAULT_CC="default-conventional-commits-accepted.json";
+node generate-version-and-release-notes.js $GITHUB_BASE_REF $GITHUB_HEAD_REF $CC_FILE;
+```
 
 # License Summary
 
