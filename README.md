@@ -61,7 +61,7 @@ The action will:
 
 - There are 2 optional parameters in this action:
 
-> **skip-commit**: use it with value "true" if you want to prevent the action from commiting.
+> **skip-commit**: use it with value "true" if you want to prevent the action from committing.
 > **version-prefix**: use with a value different than an empty string ("beta-" or "v" for example) to have tags in the form of '{version-prefix}M.m.p'
 
 ### Commits that increase the version:
@@ -92,7 +92,7 @@ examples:
 
 ### Remarks about your versioning!
 
-* If your version.json file has a 3 number version (`major.minor.patch`), others prefixes won't create a release
+* If your version.json file has a 3 number version (`major.minor.patch`), others prefixes will create a `patch` release.
 * If your has a 4 number version (`major.minor.patch.extra`), others prefixes will increase the `extra` digit.
 
 ### You want to use custom conventional commits?

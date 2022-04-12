@@ -6,8 +6,7 @@ logger.logTitle("VALIDATING CUSTOM CONVENTIONAL COMMITS TYPE");
 const AllowedReleaseType = [
   "major",
   "minor",
-  "patch",
-  "extradigit",
+  "patch"
 ];
 
 const customCCFilePath = process.argv[2];
@@ -20,18 +19,18 @@ if (fs.existsSync(customCCFilePath)) {
   CCTypevsReleaseType.forEach(element => {
     logger.logAction("Validating Convention Commit Type:")
     if (!element.commitType) {
-      throw new Error(`ERROR: no release type defined for ${element.releaseType}`);
+      throw new Error(`ERROR: no commit type defined for ${element.releaseType}`);
     }
 
     if (!element.releaseType) {
-      throw new Error(`ERROR: no commit type defined for ${element.commitType}`);
+      throw new Error(`ERROR: no release type defined for ${element.commitType}`);
     }
 
     logger.logKeyValuePair("commitType", element.commitType);
     logger.logKeyValuePair("releaseType", element.releaseType);
 
     if (!AllowedReleaseType.includes(element.releaseType)) {
-      throw new Error(`ERROR:  ${element.releaseType} is invalid release type.`);
+      throw new Error(`ERROR:  ${element.releaseType} is a invalid release type. Please use: ${AllowedReleaseType}`);
     }
   });
 
@@ -40,4 +39,3 @@ if (fs.existsSync(customCCFilePath)) {
 } else {
   throw new Error('ERROR: custom-conventional-commits-file path does not exist!');
 }
-
