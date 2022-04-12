@@ -16,6 +16,9 @@ inputs:
     description: "Prefix to put immediately before the version number when tagging. Example: v0.1.4, beta-1.4.2"
     required: false
     default: ""
+  custom-conventional-commits-file:
+    description: "json files with the custom conventional commit type vs release type associated"
+    required: false
 outputs:
   service-version:
     description: 'Service version'
@@ -23,10 +26,19 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - run: |
+    - name: 'Validate Custom Conventional Commit File IF Provided'
+      run: |
+        if test -f "${{ inputs.custom-conventional-commits-file }}"; then
+          node ${{ github.action_path }}/validate-custom-cc-types.js ${{ inputs.custom-conventional-commits-file }}
+        fi
+      shell: bash
+    - name: 'Generate Version And Release Notes'
+      env:
+        DEFAULT_CC: '${{ github.action_path }}/default-conventional-commits-accepted.json'
+      run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}
-        node ${{ github.action_path }}/generate-version-and-release-notes.js ${{ inputs.skip-git-commit }} ${{ inputs.version-prefix }}
+        node ${{ github.action_path }}/generate-version-and-release-notes.js ${{ inputs.skip-git-commit }} ${{ inputs.version-prefix }} ${{ inputs.custom-conventional-commits-file }}
       shell: bash
     - id: service-version
       run: echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"

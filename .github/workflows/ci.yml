@@ -2,6 +2,10 @@ name: continuous-integration
 on:
   pull_request:
     branches: [main]
+
+env:
+  CUSTOM_CC: "custom-conventional-commits-accepted.json"
+
 jobs:
   conventional-commits:
     runs-on: ubuntu-latest
@@ -9,11 +13,17 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
+      - name: 'Validate Custom Conventional Commit File IF Provided'
+        run: |
+          if test -f "$CUSTOM_CC"; then
+              node ./validate-custom-cc-types.js $CUSTOM_CC
+          fi
       - uses: ohpensource/ensure-conventional-commits-gh-action@main
         name: Ensure conventional commits
         with:
           base-branch: $GITHUB_BASE_REF
           pr-branch: $GITHUB_HEAD_REF
+          custom-conventional-commits-file: $CUSTOM_CC
   jira-tickets-commits:
     runs-on: ubuntu-latest
     steps:
