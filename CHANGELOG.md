@@ -1,3 +1,9 @@
+# :confetti_ball: 0.2.1 (2022-04-12T10:39:37.987Z)
+- - -
+## :bug: Fixes
+* LANZ-2264 updated docs and small change in validate-custom-cc-types to align with ensure-commits-gh-action (#7)
+- - -
+- - -
 # :confetti_ball: 0.2.0 (2022-04-12T10:02:37.794Z)
 - - -
 ## :hammer: Features
