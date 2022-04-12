@@ -2,9 +2,8 @@
 // https://stackoverflow.com/questions/9781218/how-to-change-node-jss-console-font-color
 
 const logWarning = (action) => {
-  const fontYellow = "\x1b[33"
+  const fontYellow = "\x1b[33m"
   const resetColour = "\x1b[0m"
-  console.log(``);
   console.log(`${fontYellow}${action} ...${resetColour}`);
 };
 
