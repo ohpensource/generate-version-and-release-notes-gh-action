@@ -63,6 +63,11 @@ logger.logTitle("GETTING NEW VERSION");
 let newVersion = getUpdatedVersion(previousVersion, changes);
 logger.logKeyValuePair("new-version", newVersion);
 
+if (skipGitCommit !== "true") {
+  logger.logTitle("PULLING LAST REPO CHANGES");
+  gitPull();
+}
+
 logger.logTitle("UPDATING VERSION FILE");
 files.saveJsonTo(
   versionFile,
@@ -228,11 +233,27 @@ function updateChangelogFile(newVersion, changes) {
   }
   fs.writeFileSync(changelogFile, `${changelog}${previousChangelog}`);
 }
+function gitPull(tagContent) {
+  // child.execSync(`git config pull.ff only`);
+  child.execSync(`git config pull.rebase true`);
+  child.execSync(`git pull`);
+}
+
 function commitAndTag(tagContent) {
   child.execSync(`git add ${versionFile}`);
   child.execSync(`git add ${changelogFile}`);
+
+  logger.logAction("committing and tagging locally")
   child.execSync(`git commit -m "[skip ci] Bump to version ${tagContent}"`);
   child.execSync(`git tag -a -m "Tag for version ${tagContent}" ${tagContent}`);
+
+  logger.logAction("sleeping random time before proceed")
+  child.execSync(`sleep  $(shuf -i 0-15 -n1)`);
+
+  logger.logAction("pulling latest changes")
+  child.execSync(`git pull`);
+
+  logger.logAction("pushing changes")
   child.execSync(`git push --follow-tags`);
 }
 
