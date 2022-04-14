@@ -1,7 +1,11 @@
 - [generate-version-and-release-notes-gh-action](#generate-version-and-release-notes-gh-action)
   - [Requirements](#requirements)
   - [How to use](#how-to-use)
-    - [](#)
+    - [Commits that increase the version:](#commits-that-increase-the-version)
+    - [Remarks about your versioning!](#remarks-about-your-versioning)
+    - [Conventional Commits support:](#conventional-commits-support)
+    - [You want to use custom conventional commits?](#you-want-to-use-custom-conventional-commits)
+- [Other User Cases](#other-user-cases)
 - [License Summary](#license-summary)
 
 # generate-version-and-release-notes-gh-action
@@ -111,63 +115,14 @@ commit examples:
 | `docs: commit type docs`                               | patch                     |
 | `refactor: commit type refactor`                       | patch                     |
 
-### You want to use custom conventional commits?
 
-Follow the next steps to define more conventional commits:
+# Other User Cases
 
-1. Create a json file providing the custom commit type and the release associated (`major,minor,patch`) as next:
-
-```json
-[
-    {
-        "commitType": "break",
-        "releaseType": "major"
-    },
-    {
-        "commitType": "feat",
-        "releaseType": "minor"
-    },
-    {
-        "commitType": "fix",
-        "releaseType": "minor"
-    },
-    {
-        "commitType": "refactor",
-        "releaseType": "minor"
-    },
-    {
-        "commitType": "docs",
-        "releaseType": "minor"
-    }
-]
-```
-
-2. Provide its path in the parameter `custom-conventional-commits-file`
-
-```yaml
-      - uses: ohpensource/generate-version-and-release-notes-gh-action@main
-        name: semver & changelog
-        with:
-          user-email: "user@email.com"
-          skip-commit: "true"  This is for testing so you don't polute your git history. Default value is false.
-          version-prefix: "v"  useful for repos that terraform modules where the versions are like "v0.2.4".
-          custom-conventional-commits-file: custom-conventional-commits.json
-```
-example fie: [custom-conventional-commits-accepted.json](custom-conventional-commits-accepted.json)
-
-
-# Test this in Windows using WSL Ubuntu
-
-```bash
-CUSTOM_CC_FILE="custom-conventional-commits-accepted.json";
-node validate-custom-cc-types.js $CUSTOM_CC_FILE ;
-
-GITHUB_BASE_REF="main";
-GITHUB_HEAD_REF="LANZ-2249";
-CC_FILE="custom-conventional-commits-accepted.json";
-export DEFAULT_CC="default-conventional-commits-accepted.json";
-node generate-version-and-release-notes.js $GITHUB_BASE_REF $GITHUB_HEAD_REF $CC_FILE;
-```
+| User Case                                                                                 | Documentation                               |
+| ----------------------------------------------------------------------------------------- | ------------------------------------------- |
+| You want to provide custom conventional commits?                                          | [link](docs/custom-conventional-commits.md) |
+| You have more than one app in your repo and you want each one to have its own versioning? | [link](docs/repo-multiple-apps.md)          |
+| You want to test the javascript this repo is base                                         | [link](docs/testing-this-wsl.md)            |
 
 # License Summary
 
