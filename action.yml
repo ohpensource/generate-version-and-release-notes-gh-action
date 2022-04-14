@@ -32,7 +32,7 @@ runs:
   using: "composite"
   steps:
     - name: 'Validate Custom Conventional Commit File IF Provided'
-      if: ${{ github.event.inputs.custom-conventional-commits-file }} != ''
+      if: ${{ github.event.inputs.custom-conventional-commits-file != '' }}
       run: |
         node ${{ github.action_path }}/validate-custom-cc-types.js ${{ inputs.custom-conventional-commits-file }}
         echo "USE_CUSTOM_CC=true" >> $GITHUB_ENV
