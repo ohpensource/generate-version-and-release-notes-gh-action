@@ -1,3 +1,9 @@
+# :confetti_ball: 0.3.1 (2022-04-14T08:51:17.636Z)
+- - -
+## :newspaper: Others
+* fix:LANZ-2286 fix error when no custom conventional commit provided (#10)
+- - -
+- - -
 # :confetti_ball: 0.3.0 (2022-04-12T12:54:19.092Z)
 - - -
 ## :hammer: Features
