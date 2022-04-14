@@ -4,7 +4,6 @@
     - [Commits that increase the version:](#commits-that-increase-the-version)
     - [Remarks about your versioning!](#remarks-about-your-versioning)
     - [Conventional Commits support:](#conventional-commits-support)
-    - [You want to use custom conventional commits?](#you-want-to-use-custom-conventional-commits)
 - [Other User Cases](#other-user-cases)
 - [License Summary](#license-summary)
 

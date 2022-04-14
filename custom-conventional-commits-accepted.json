@@ -8,7 +8,7 @@
         "releaseType": "major"
     },
     {
-        "commitType": "feat",
+        "commitType": "fix",
         "releaseType": "minor"
     },
     {
