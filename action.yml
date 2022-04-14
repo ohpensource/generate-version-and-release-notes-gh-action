@@ -17,20 +17,27 @@ inputs:
     required: false
     default: ""
   custom-conventional-commits-file:
-    description: "json files with the custom conventional commit type vs release type associated"
+    description: "json files with the custom conventional commit type vs release type associated. DO NOT PROVIDE WITH ./ AT THE BEGINING"
     required: false
+  app-dir:
+    description: "app dir where the changelog and version.json will be created"
+    required: false
+
 outputs:
   service-version:
     description: 'Service version'
     value: ${{ steps.service-version.outputs.service-version }}
+
 runs:
   using: "composite"
   steps:
     - name: 'Validate Custom Conventional Commit File IF Provided'
+      if: ${{ github.event.inputs.custom-conventional-commits-file != '' }}
       run: |
-        if test -f "${{ inputs.custom-conventional-commits-file }}"; then
-          node ${{ github.action_path }}/validate-custom-cc-types.js ${{ inputs.custom-conventional-commits-file }}
-        fi
+        echo "value:${{ inputs.custom-conventional-commits-file }}"
+        node ${{ github.action_path }}/validate-custom-cc-types.js ${{ inputs.custom-conventional-commits-file }}
+        echo "USE_CUSTOM_CC=true" >> $GITHUB_ENV
+        echo "CUSTOM_CC=$(pwd)/${{ inputs.custom-conventional-commits-file }}" >> $GITHUB_ENV
       shell: bash
     - name: 'Generate Version And Release Notes'
       env:
@@ -38,8 +45,15 @@ runs:
       run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}
-        node ${{ github.action_path }}/generate-version-and-release-notes.js ${{ inputs.skip-git-commit }} ${{ inputs.version-prefix }} ${{ inputs.custom-conventional-commits-file }}
+        if [[ -n "${{ inputs.app-dir }}" ]]; then
+          cd ${{ inputs.app-dir }}
+        fi
+        node ${{ github.action_path }}/generate-version-and-release-notes.js ${{ inputs.skip-git-commit }} ${{ inputs.version-prefix }} $CUSTOM_CC
       shell: bash
     - id: service-version
-      run: echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
+      run: |
+        if [[ -n "${{ inputs.app-dir }}" ]]; then
+          cd ${{ inputs.app-dir }}
+        fi
+        echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
       shell: bash

@@ -45,10 +45,10 @@ jobs:
         id: changed-files
         uses: tj-actions/changed-files@v14.3
         with:
-          files: "README.md"
+          files: "*.md"
       - name: ensure-documentation-is-added
         if: steps.changed-files.outputs.any_modified == 'false'
         uses: actions/github-script@v3
         with:
           script: |
-              core.setFailed('Include documentation in the README.md file!')
+              core.setFailed('Include documentation in the README.md or docs/*.md file!')
