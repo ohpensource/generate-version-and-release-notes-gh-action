@@ -1,3 +1,9 @@
+# :confetti_ball: 0.3.2 (2022-04-21T08:31:21.106Z)
+- - -
+## :bug: Fixes
+* LANZ-2306 provide default value for version-prefix input (#11)
+- - -
+- - -
 # :confetti_ball: 0.3.1 (2022-04-14T08:51:17.636Z)
 - - -
 ## :newspaper: Others
