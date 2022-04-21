@@ -1,3 +1,5 @@
+# generate-version-and-release-notes-gh-action
+
 - [generate-version-and-release-notes-gh-action](#generate-version-and-release-notes-gh-action)
   - [Requirements](#requirements)
   - [How to use](#how-to-use)
@@ -6,8 +8,6 @@
     - [Conventional Commits support:](#conventional-commits-support)
 - [Other User Cases](#other-user-cases)
 - [License Summary](#license-summary)
-
-# generate-version-and-release-notes-gh-action
 
 ## Requirements
 
@@ -20,6 +20,7 @@ You have to update your repo to only allow that `squash and merge`:
 ![settings](docs/gh_repo_merge_settings.png)
 
 ## How to use
+
 This repository includes an action to semantically version your repository once a merge happens to the main branch. This is an example on how to use the action in your own repository:
 
 ```yaml

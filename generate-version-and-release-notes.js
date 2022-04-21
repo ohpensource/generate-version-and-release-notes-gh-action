@@ -11,7 +11,7 @@ logger.logTitle("GENERATE VERSION AND RELEASE NOTES");
 // -----------------------------//
 
 const skipGitCommit = process.argv[2];
-const versionPrefix = process.argv[3];
+const versionPrefix = process.argv[3] || '';
 const customCCFilePath = process.argv[4] || 'not provided';
 const defaultCCFilePath = process.env.DEFAULT_CC
 defaultCCTypes = parseFile(defaultCCFilePath)
