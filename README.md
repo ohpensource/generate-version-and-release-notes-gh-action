@@ -1,17 +1,21 @@
 # generate-version-and-release-notes-gh-action
 
-- [generate-version-and-release-notes-gh-action](#generate-version-and-release-notes-gh-action)
-  - [Requirements](#requirements)
-  - [How to use](#how-to-use)
-    - [Commits that increase the version:](#commits-that-increase-the-version)
-    - [Remarks about your versioning!](#remarks-about-your-versioning)
-    - [Conventional Commits support:](#conventional-commits-support)
-- [Other User Cases](#other-user-cases)
+- [Features](#features)
+- [Requirements](#requirements)
+- [How to use](#how-to-use)
+  - [Commits that increase the version:](#commits-that-increase-the-version)
+  - [Remarks about your versioning!](#remarks-about-your-versioning)
+  - [Conventional Commits support:](#conventional-commits-support)
+- [Other Use Cases](#other-use-cases)
 - [License Summary](#license-summary)
+
+## Features
+
+- 23-05-2022: CHANGELOG file now are rendered with markdown links for JIRA tickets.
 
 ## Requirements
 
-:warning: Attention! You need to merge your pull requests using the "squash" option. 
+:warning: Attention! You need to merge your pull requests using the "squash" option.
 
 ![settings](docs/how_to_merge_prs.png)
 
@@ -68,7 +72,7 @@ The action will:
 > **skip-commit**: use it with value "true" if you want to prevent the action from committing.
 > **version-prefix**: use with a value different than an empty string ("beta-" or "v" for example) to have tags in the form of '{version-prefix}M.m.p'
 
-### Commits that increase the version:
+### Commits that increase the version
 
 The next commit types (prefixes) define the release type (major, minor, patch) when a PR is merged:
 
@@ -88,21 +92,22 @@ The next commit types (prefixes) define the release type (major, minor, patch) w
     }
 ]
 ```
+
 examples:
 
-* break: LANZ-123 updated API desing-> create a major release (**X+1**.y.z)
-* feat: LANZ-123 created new feature -> create a minor release (x.**Y+1**.z)
-* fix: LANZ-123 fixed bug keeping compatibility-> create a patch release (x.y.**Z+1**)
+- break: LANZ-123 updated API desing-> create a major release (**X+1**.y.z)
+- feat: LANZ-123 created new feature -> create a minor release (x.**Y+1**.z)
+- fix: LANZ-123 fixed bug keeping compatibility-> create a patch release (x.y.**Z+1**)
 
-### Remarks about your versioning!
+### Remarks about your versioning
 
-* If your version.json file has a 3 number version (`major.minor.patch`), other prefixes will create a `patch` release.
-* If your has a 4 number version (`major.minor.patch.extra`), other prefixes will increase the `extra` digit.
+- If your version.json file has a 3 number version (`major.minor.patch`), other prefixes will create a `patch` release.
+- If your has a 4 number version (`major.minor.patch.extra`), other prefixes will increase the `extra` digit.
 
-### Conventional Commits support:
+### Conventional Commits support
 
-* commit scope is supported as: `prefix (scope): msg`
-* breaking change using exclamation mark `!` is supported as `prefix (scope)!: msg`
+- commit scope is supported as: `prefix (scope): msg`
+- breaking change using exclamation mark `!` is supported as `prefix (scope)!: msg`
 
 commit examples:
 
@@ -115,15 +120,14 @@ commit examples:
 | `docs: commit type docs`                               | patch                     |
 | `refactor: commit type refactor`                       | patch                     |
 
+## Other Use Cases
 
-# Other User Cases
-
-| User Case                                                                                 | Documentation                               |
+| Use Case                                                                                 | Documentation                               |
 | ----------------------------------------------------------------------------------------- | ------------------------------------------- |
 | You want to provide custom conventional commits?                                          | [link](docs/custom-conventional-commits.md) |
 | You have more than one app in your repo and you want each one to have its own versioning? | [link](docs/repo-multiple-apps.md)          |
 | You want to test the javascript this repo is base                                         | [link](docs/testing-this-wsl.md)            |
 
-# License Summary
+## License Summary
 
 This code is made available under the MIT license. Details [here](LICENSE).
