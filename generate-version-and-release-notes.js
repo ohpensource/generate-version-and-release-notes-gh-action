@@ -213,9 +213,10 @@ function updateChangelogFile(newVersion, changes) {
       headerByType[semverType],
       changes
         .filter((change) => change.type == semverType)
-        .map((change) => `* ${change.content}\n`)
+        .map((change) => addMarkdownLinks(`* ${change.content}\n`))
     );
   }
+
   changelog += "- - -\n";
   changelog += "- - -\n";
   console.log(changelog);
@@ -226,6 +227,23 @@ function updateChangelogFile(newVersion, changes) {
     previousChangelog = "";
   }
   fs.writeFileSync(changelogFile, `${changelog}${previousChangelog}`);
+}
+function reverse(str) {
+  return str.split("").reverse().join("");
+}
+function addMarkdownLinks(str) {
+  let strWithLinks = str;
+  const tickets = (
+    reverse(str).match(/\d+-[A-Z]+(?!-?[a-zA-Z]{1,10})/g) || []
+  ).map((reversedTicket) => reverse(reversedTicket));
+  [...new Set(tickets)].forEach((ticket) => {
+    strWithLinks = strWithLinks.replace(
+      ticket,
+      `[${ticket}](https://ohpen.atlassian.net/browse/${ticket})`
+    );
+  });
+
+  return strWithLinks;
 }
 function gitPull(tagContent) {
   child.execSync(`git config pull.ff only`);
