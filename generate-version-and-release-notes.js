@@ -11,10 +11,10 @@ logger.logTitle("GENERATE VERSION AND RELEASE NOTES");
 // -----------------------------//
 
 const skipGitCommit = process.argv[2];
-const versionPrefix = process.argv[3] || '';
-const customCCFilePath = process.argv[4] || 'not provided';
-const defaultCCFilePath = process.env.DEFAULT_CC
-defaultCCTypes = parseFile(defaultCCFilePath)
+const versionPrefix = process.argv[3] || "";
+const customCCFilePath = process.argv[4] || "not provided";
+const defaultCCFilePath = process.env.DEFAULT_CC;
+defaultCCTypes = parseFile(defaultCCFilePath);
 
 logger.logKeyValuePair("skip-git-commit", skipGitCommit);
 logger.logKeyValuePair("version-prefix", versionPrefix);
@@ -27,17 +27,29 @@ logger.logKeyValuePair("default-cc-types", defaultCCTypes);
 
 const versionFile = "version.json";
 const changelogFile = "CHANGELOG.md";
+const semverChanges = {
+  major: "major",
+  minor: "minor",
+  patch: "patch",
+  none: "none",
+};
+const headerByType = {
+  major: "## :boom: BREAKING CHANGES\n",
+  minor: "## :hammer: Features\n",
+  patch: "## :bug: Fixes\n",
+  none: "## :newspaper: Others\n",
+};
 
-let useCustomCC = false
-let customCCTypes = []
-if (customCCFilePath !== 'not provided') {
+let useCustomCC = false;
+let customCCTypes = [];
+if (customCCFilePath !== "not provided") {
   useCustomCC = true;
   customCCTypes = parseFile(customCCFilePath);
   logger.logKeyValuePair("custom-cc-types", customCCTypes);
 }
 
 logger.logKeyValuePair("using-custom-conventional-commits", useCustomCC);
-const commitTypes = useCustomCC ? customCCTypes : defaultCCTypes
+const commitTypes = useCustomCC ? customCCTypes : defaultCCTypes;
 
 logger.logTitle("GETTING MERGE COMMIT");
 let lastCommit = git.getLastCommit();
@@ -79,8 +91,8 @@ updateChangelogFile(newVersion, changes);
 
 if (skipGitCommit !== "true") {
   logger.logTitle("COMMITTING AND TAGGING");
-  logger.logKeyValuePair('versionPrefix', versionPrefix);
-  logger.logKeyValuePair('newVersion', newVersion);
+  logger.logKeyValuePair("versionPrefix", versionPrefix);
+  logger.logKeyValuePair("newVersion", newVersion);
   commitAndTag(`${versionPrefix}${newVersion}`);
 }
 
@@ -110,18 +122,18 @@ function getUpdatedVersion(version, changes) {
   let newMinor = 0;
   let newPatch = 0;
   let newSecondary = 0;
-  if (changes.some((change) => change.type === "major")) {
+  if (changes.some((change) => change.type === semverChanges.major)) {
     newMajor = major + 1;
     newMinor = 0;
     newPatch = 0;
     newSecondary = 0;
-  } else if (changes.some((change) => change.type === "minor")) {
+  } else if (changes.some((change) => change.type === semverChanges.minor)) {
     newMajor = major;
     newMinor = minor + 1;
     newPatch = 0;
     newSecondary = 0;
   } else if (
-    changes.some((change) => change.type === "patch") ||
+    changes.some((change) => change.type === semverChanges.patch) ||
     versionFileContent.length === 3
   ) {
     newMajor = major;
@@ -142,45 +154,45 @@ function getUpdatedVersion(version, changes) {
   }
 }
 function getChange(line, commitTypes) {
-  const convRegex = /(?<type>^[a-z]+)(?<scope>\([a-z\d,\-]+\))?(?<breaking>!)?(?<colon>:{1})(?<space> {1})(?<subject>.*)/;
+  const convRegex =
+    /(?<type>^[a-z]+)(?<scope>\([a-z\d,\-]+\))?(?<breaking>!)?(?<colon>:{1})(?<space> {1})(?<subject>.*)/;
   let matchResult = line.match(convRegex);
 
   if (matchResult) {
-
     let result = {
-      type: '',
-      content: ''
-    }
+      type: "",
+      content: "",
+    };
     let { type, breaking, scope, subject } = matchResult.groups;
-    breaking = breaking == '!'
-    const validPrefix = commitTypes.some(x => x.commitType == type);
+    breaking = breaking == "!";
+    const validPrefix = commitTypes.some((x) => x.commitType == type);
 
     if (validPrefix) {
-      result.type = breaking ? "major" : commitTypes.find(x => x.commitType == type).releaseType
-      result.content = subject.trim()
-      if (scope)
-        result.content = `${scope.trim()}: ${result.content}`
+      result.type = breaking
+        ? semverChanges.major
+        : commitTypes.find((x) => x.commitType == type).releaseType;
+      result.content = subject.trim();
+      if (scope) result.content = `${scope.trim()}: ${result.content}`;
     } else {
-      result.type = "none"
-      result.content = line.trim()
+      result.type = "none";
+      result.content = line.trim();
     }
-
 
     if (breaking) {
-      logger.logKeyValuePair('commit message', line)
-      logger.logWarning(`\tbreaking:${breaking} `)
-      logger.logWarning(`\ttype:${result.type} `)
+      logger.logKeyValuePair("commit message", line);
+      logger.logWarning(`\tbreaking:${breaking} `);
+      logger.logWarning(`\ttype:${result.type} `);
     }
 
-    logger.logKeyValuePair('result', result)
+    logger.logKeyValuePair("result", result);
 
-    return result
+    return result;
   }
 
   return {
     type: "none",
-    content: line.trim()
-  }
+    content: line.trim(),
+  };
 }
 function getPreviousVersionAsText(versionFileContent) {
   let previousVersion = "";
@@ -194,34 +206,16 @@ function getPreviousVersionAsText(versionFileContent) {
 function updateChangelogFile(newVersion, changes) {
   let changelog = `# :confetti_ball: ${newVersion} (${new Date().toISOString()})\n`;
   changelog += "- - -\n";
-  changelog = updateChangelogWith(
-    changelog,
-    "## :boom: BREAKING CHANGES\n",
-    changes
-      .filter((change) => change.type == "major")
-      .map((change) => `* ${change.content}\n`)
-  );
-  changelog = updateChangelogWith(
-    changelog,
-    "## :hammer: Features\n",
-    changes
-      .filter((change) => change.type == "minor")
-      .map((change) => `* ${change.content}\n`)
-  );
-  changelog = updateChangelogWith(
-    changelog,
-    "## :bug: Fixes\n",
-    changes
-      .filter((change) => change.type == "patch")
-      .map((change) => `* ${change.content}\n`)
-  );
-  changelog = updateChangelogWith(
-    changelog,
-    "## :newspaper: Others\n",
-    changes
-      .filter((change) => change.type == "none")
-      .map((change) => `* ${change.content}\n`)
-  );
+  for (const key in semverChanges) {
+    const semverType = semverChanges[key];
+    changelog = updateChangelogWith(
+      changelog,
+      headerByType[semverType],
+      changes
+        .filter((change) => change.type == semverType)
+        .map((change) => `* ${change.content}\n`)
+    );
+  }
   changelog += "- - -\n";
   changelog += "- - -\n";
   console.log(changelog);
@@ -242,14 +236,14 @@ function commitAndTag(tagContent) {
   child.execSync(`git add ${versionFile}`);
   child.execSync(`git add ${changelogFile}`);
 
-  logger.logAction("committing and tagging locally")
+  logger.logAction("committing and tagging locally");
   child.execSync(`git commit -m "[skip ci] Bump to version ${tagContent}"`);
   child.execSync(`git tag -a -m "Tag for version ${tagContent}" ${tagContent}`);
 
-  logger.logAction("pulling latest changes")
+  logger.logAction("pulling latest changes");
   child.execSync(`git pull --ff-only`);
 
-  logger.logAction("pushing changes")
+  logger.logAction("pushing changes");
   child.execSync(`git push --follow-tags`);
 }
 
