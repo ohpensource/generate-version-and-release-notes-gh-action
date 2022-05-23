@@ -1,3 +1,12 @@
+# :confetti_ball: 0.4.0 (2022-05-23T08:17:45.957Z)
+- - -
+## :hammer: Features
+* [LANZ-2394](https://ohpen.atlassian.net/browse/LANZ-2394) include markdown ticket link in readme
+## :newspaper: Others
+* refactor: [LANZ-2394](https://ohpen.atlassian.net/browse/LANZ-2394) aggregate changelog changes by semver type of change
+* docs: [LANZ-2394](https://ohpen.atlassian.net/browse/LANZ-2394) include new feature documentation
+- - -
+- - -
 # :confetti_ball: 0.3.3 (2022-05-11T09:45:51.291Z)
 - - -
 ## :newspaper: Others
