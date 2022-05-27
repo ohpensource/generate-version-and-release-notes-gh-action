@@ -1,0 +1,27 @@
+{
+  "name": "generate-version-and-release-notes-gh-action",
+  "version": "1.0.0",
+  "description": "- [Features](#features)\r - [Requirements](#requirements)\r - [How to use](#how-to-use)\r   - [Commits that increase the version:](#commits-that-increase-the-version)\r   - [Remarks about your versioning!](#remarks-about-your-versioning)\r   - [Conventional Commits support:](#conventional-commits-support)\r - [Other Use Cases](#other-use-cases)\r - [License Summary](#license-summary)",
+  "main": "file-tools.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ohpensource/generate-version-and-release-notes-gh-action.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ohpensource/generate-version-and-release-notes-gh-action/issues"
+  },
+  "homepage": "https://github.com/ohpensource/generate-version-and-release-notes-gh-action#readme",
+  "dependencies": {
+    "@actions/core": "^1.8.2",
+    "@actions/github": "^5.0.3"
+  }
+}
