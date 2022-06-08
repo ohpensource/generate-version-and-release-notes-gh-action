@@ -1,3 +1,5 @@
+const logger = require('./logger.js')
+
 const child = require("child_process");
 const splitText = "<#@112358@#>";
 const prettyFormat = [
@@ -16,23 +18,6 @@ const prettyFormat = [
   "",
 ];
 
-const getCommitsInsidePullRequest = (destinationBranchName, branchName) => {
-  let mergeBaseCommit = child
-    .execSync(`git merge-base origin/${destinationBranchName} ${branchName}`)
-    .toString("utf-8")
-    .split("\n")[0];
-  let commits = child
-    .execSync(
-      `git log ${mergeBaseCommit}..${branchName} --no-merges --pretty=format:"${prettyFormat.join(
-        splitText
-      )}"`
-    )
-    .toString("utf-8")
-    .split(`${splitText}\n`)
-    .map((commitInfoText) => getCommitInfo(commitInfoText));
-
-  return commits;
-};
 const getLastCommit = () => {
   let commit = child
     .execSync(
@@ -44,6 +29,19 @@ const getLastCommit = () => {
 
   return commit;
 };
+
+const getMergedCommits = () => {
+  const lastCommit = getLastCommit()
+  logger.logKeyValuePair('last commit', lastCommit)
+
+  let changes = lastCommit.body
+    .split("\n")
+    .filter((block) => block.startsWith("* "))
+    .map((block) => block.replace("* ", ""));
+
+  return changes;
+};
+
 const getCommitInfo = (commitToParse) => {
   let commitInfoAsArray = commitToParse.split(`${splitText}`);
   var branchAndTags = commitInfoAsArray[commitInfoAsArray.length - 1]
@@ -74,7 +72,13 @@ const getCommitInfo = (commitToParse) => {
   };
 };
 
+const getFilesModifiedInACommit = (commitHash) => child
+  .execSync(`git diff-tree --no-commit-id --name-only -r ${commitHash}`)
+  .toString("utf-8")
+  .split("\n")
+  .filter(line => line.length > 0)
+
 module.exports = {
-  getCommitsInsidePullRequest,
-  getLastCommit,
+  getMergedCommits,
+  getFilesModifiedInACommit
 };

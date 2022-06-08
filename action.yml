@@ -16,11 +16,8 @@ inputs:
     description: "Prefix to put immediately before the version number when tagging. Example: v0.1.4, beta-1.4.2"
     required: false
     default: ""
-  custom-conventional-commits-file:
+  settings-file:
     description: "json files with the custom conventional commit type vs release type associated. DO NOT PROVIDE WITH ./ AT THE BEGINING"
-    required: false
-  app-dir:
-    description: "app dir where the changelog and version.json will be created"
     required: false
 
 outputs:
@@ -31,28 +28,17 @@ outputs:
 runs:
   using: "composite"
   steps:
-    - name: 'Validate Custom Conventional Commit File IF Provided'
-      if: ${{ github.event.inputs.custom-conventional-commits-file != '' }}
-      run: |
-        node ${{ github.action_path }}/validate-custom-cc-types.js ${{ inputs.custom-conventional-commits-file }}
-        echo "USE_CUSTOM_CC=true" >> $GITHUB_ENV
-        echo "CUSTOM_CC=$(pwd)/${{ inputs.custom-conventional-commits-file }}" >> $GITHUB_ENV
-      shell: bash
     - name: 'Generate Version And Release Notes'
       env:
-        DEFAULT_CC: '${{ github.action_path }}/default-conventional-commits-accepted.json'
+        SKIP_GIT_COMMIT: ${{ inputs.skip-git-commit }} 
+        VERSION_PREFIX: ${{ inputs.version-prefix }}
+        SETTINGS_FILE: ${{ inputs.settings-file }}
       run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}
-        if [[ -n "${{ inputs.app-dir }}" ]]; then
-          cd ${{ inputs.app-dir }}
-        fi
-        node ${{ github.action_path }}/generate-version-and-release-notes.js ${{ inputs.skip-git-commit }} ${{ inputs.version-prefix }} $CUSTOM_CC
+        node ${{ github.action_path }}/main.js
       shell: bash
     - id: service-version
       run: |
-        if [[ -n "${{ inputs.app-dir }}" ]]; then
-          cd ${{ inputs.app-dir }}
-        fi
         echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
       shell: bash

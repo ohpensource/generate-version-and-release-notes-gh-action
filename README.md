@@ -23,6 +23,8 @@ You have to update your repo to only allow that `squash and merge`:
 
 ![settings](docs/gh_repo_merge_settings.png)
 
+:warning: Your commits must follow conventional commits. To ensure that you can use our GH action: [ensure-conventional-commits-gh-action](https://github.com/ohpensource/ensure-conventional-commits-gh-action/).
+
 ## How to use
 
 This repository includes an action to semantically version your repository once a merge happens to the main branch. This is an example on how to use the action in your own repository:
@@ -42,24 +44,24 @@ jobs:
           token: ${{ secrets.CHECKOUT_WITH_A_SECRET_IF_NEEDED }}
       - uses: ohpensource/generate-version-and-release-notes-gh-action@main
         name: semver & changelog
+        id: semver
         with:
           user-email: "user@email.com"
           skip-commit: "true"  This is for testing so you don't polute your git history. Default value is false.
           version-prefix: "v"  useful for repos that terraform modules where the versions are like "v0.2.4".
-      - id: semver
-        run: echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
-    outputs:
-      service-version: ${{ steps.semver.outputs.service-version }}
+          settings-file: cicd/settings.json
+      - name: show new version
+        run: echo "version released: ${{ steps.semver.outputs.service-version }}"
 ```
 
 The action will:
 
 - Analyse the commits from the pull request that has been merged to main branch and extract the necessary information.
-- Summarize all the pull request changes into you CHANGELOG.md file.
-- Deduce the new version from those commits (your commits must follow conventional-commits! Check out the _check-conventional-commits_ action).
+- Summarize all the pull request changes into your CHANGELOG.md file.
+- Deduce the new version from the commits merged.
 - Commit, tag and push changes in version.json and CHANGELOG.md (you can skip this part by setting parameter _skip-git-commit_ to true, for example when you want to change more files and push changes in one commit by yourself)
 - You can also set up name to sign the commit with parameter: _user-name_. Default value is _GitHub Actions_
-- The action will, by default, use MAJOR.MINOR.PATCH semantics to generate version number, if you want to use MAJOR.MINOR.PATCH.SECONDARY versioning, the version.json file in the root of your project have to contain 4 numbers separated by dot. For new applications it can look like this:
+- The action will, by default, use MAJOR.MINOR.PATCH semantics to generate version number, if you want to use MAJOR.MINOR.PATCH.SECONDARY versioning, the version.json file in the root of your project must have 4 numbers separated by dot. For new applications it can look like this:
 
 ```json
 {
@@ -119,14 +121,6 @@ commit examples:
 | `break: commit type break`                             | major                     |
 | `docs: commit type docs`                               | patch                     |
 | `refactor: commit type refactor`                       | patch                     |
-
-## Other Use Cases
-
-| Use Case                                                                                 | Documentation                               |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------- |
-| You want to provide custom conventional commits?                                          | [link](docs/custom-conventional-commits.md) |
-| You have more than one app in your repo and you want each one to have its own versioning? | [link](docs/repo-multiple-apps.md)          |
-| You want to test the javascript this repo is base                                         | [link](docs/testing-this-wsl.md)            |
 
 ## License Summary
 
