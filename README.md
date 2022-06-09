@@ -3,15 +3,12 @@
 - [Features](#features)
 - [Requirements](#requirements)
 - [How to use](#how-to-use)
-  - [Commits that increase the version:](#commits-that-increase-the-version)
-  - [Remarks about your versioning!](#remarks-about-your-versioning)
-  - [Conventional Commits support:](#conventional-commits-support)
-- [Other Use Cases](#other-use-cases)
 - [License Summary](#license-summary)
 
 ## Features
 
 - 23-05-2022: CHANGELOG file now are rendered with markdown links for JIRA tickets.
+- 10-06-2022: Added custom changelog update through scopes.
 
 ## Requirements
 
@@ -22,6 +19,8 @@
 You have to update your repo to only allow that `squash and merge`:
 
 ![settings](docs/gh_repo_merge_settings.png)
+
+:warning: Your commits must follow conventional commits. To ensure that you can use our GH action to validate your PRs: [ensure-conventional-commits-gh-action](https://github.com/ohpensource/ensure-conventional-commits-gh-action/).
 
 ## How to use
 
@@ -40,26 +39,27 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.CHECKOUT_WITH_A_SECRET_IF_NEEDED }}
-      - uses: ohpensource/generate-version-and-release-notes-gh-action@main
+      - uses: ohpensource/generate-version-and-release-notes-gh-action@v1.0.0
         name: semver & changelog
+        id: semver
         with:
           user-email: "user@email.com"
-          skip-commit: "true"  This is for testing so you don't polute your git history. Default value is false.
+          user-name: "user-name-for-git-commits"
+          skip-commit: "true"  This is for testing so you don't pollute your git history. Default value is false.
           version-prefix: "v"  useful for repos that terraform modules where the versions are like "v0.2.4".
-      - id: semver
-        run: echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
-    outputs:
-      service-version: ${{ steps.semver.outputs.service-version }}
+          settings-file: cicd/settings.json
+      - name: show new version
+        run: echo "version released: ${{ steps.semver.outputs.service-version }}"
 ```
 
 The action will:
 
-- Analyse the commits from the pull request that has been merged to main branch and extract the necessary information.
-- Summarize all the pull request changes into you CHANGELOG.md file.
-- Deduce the new version from those commits (your commits must follow conventional-commits! Check out the _check-conventional-commits_ action).
+- Analyse the commits from the pull request that has been merged to `main` branch and extract the necessary information.
+- Summarize all the pull request changes into your `CHANGELOG.md` file.
+- Deduce the new version from the commits merged.
 - Commit, tag and push changes in version.json and CHANGELOG.md (you can skip this part by setting parameter _skip-git-commit_ to true, for example when you want to change more files and push changes in one commit by yourself)
-- You can also set up name to sign the commit with parameter: _user-name_. Default value is _GitHub Actions_
-- The action will, by default, use MAJOR.MINOR.PATCH semantics to generate version number, if you want to use MAJOR.MINOR.PATCH.SECONDARY versioning, the version.json file in the root of your project have to contain 4 numbers separated by dot. For new applications it can look like this:
+- You can also set up a name to sign the commit with the parameter: _user-name__. The default value is _GitHub Actions_
+- The action will, by default, use MAJOR.MINOR.PATCH semantics to generate version number, if you want to use MAJOR.MINOR.PATCH.SECONDARY versioning, the `version.json` file in the root of your project must have 4 numbers separated by dot. For new applications it can look like this:
 
 ```json
 {
@@ -67,66 +67,109 @@ The action will:
 }
 ```
 
-- There are 2 optional parameters in this action:
+- There are 3 optional parameters in this action:
 
 > **skip-commit**: use it with value "true" if you want to prevent the action from committing.
 > **version-prefix**: use with a value different than an empty string ("beta-" or "v" for example) to have tags in the form of '{version-prefix}M.m.p'
-
-### Commits that increase the version
-
-The next commit types (prefixes) define the release type (major, minor, patch) when a PR is merged:
+> **settings-file**: path to a JSON file where you can define your custom conventional commits and scopes. Next is an example:
 
 ```json
-[
-    {
-        "commitType": "break",
-        "releaseType": "major"
+{
+    "conventionalCommits": {
+        "break": {
+            "release": "major"
+        },
+        "feat": {
+            "release": "minor"
+        },
+        "fix": {
+            "release": "patch"
+        },
+        "refactor": {
+            "release": "none"
+        },
+        "docs":{
+            "release": "none"
+        }
     },
-    {
-        "commitType": "feat",
-        "releaseType": "minor"
-    },
-    {
-        "commitType": "fix",
-        "releaseType": "patch"
+    "scopes": {
+        "app1": {
+            "folderPattern": "app1"
+        },
+        "app2": {
+            "folderPattern": "app2"
+        },
+        "app3": {
+            "folderPattern": "app3"
+        }
     }
-]
+}
+```
+
+* Custom conventional commits settings (key: `conventionalCommits`).
+  * List of prefixes that commits must start with. Examples: `break,feat,fix`
+  * For every prefix, the release type based on the semantic versioner must be provided. Valid values are: `major,minor,patch,none`. key: `release`
+* Scopes list (key: `scopes`):
+  * Every scope should have a `folderPattern` where a specific CHANGELOG.md will be updated with the commits that contain that scope.
+  * If a commit does not provide a scope. The root changelog will be updated.
+
+If no `conventionalCommits` are defined in the `settings-file`, the commit types (prefixes) accepted would be:
+
+```json
+{
+    "break": {
+        "release": "major"
+    },
+    "feat": {
+        "release": "minor"
+    },
+    "fix": {
+        "release": "fix"
+    },
+    "build": {
+        "release": "none"
+    },
+    "chore": {
+        "release": "none"
+    },
+    "ci": {
+        "release": "none"
+    },
+    "docs": {
+        "release": "none"
+    },
+    "style": {
+        "release": "none"
+    },
+    "refactor": {
+        "release": "none"
+    },
+    "perf": {
+        "release": "none"
+    },
+    "test": {
+        "release": "none"
+    }
+}
 ```
 
 examples:
 
-- break: LANZ-123 updated API desing-> create a major release (**X+1**.y.z)
-- feat: LANZ-123 created new feature -> create a minor release (x.**Y+1**.z)
-- fix: LANZ-123 fixed bug keeping compatibility-> create a patch release (x.y.**Z+1**)
+- break: LANZ-123 updated API design-> creates a major release (**X+1**.y.z)
+- fix!: LANZ-123 fixed bug but breakign compatibility-> creates a major release (**X+1**.y.z)
+- feat: LANZ-123 created new feature -> create sa minor release (x.**Y+1**.z)
+- fix: LANZ-123 fixed bug keeping compatibility-> creates a patch release (x.y.**Z+1**)
+- docs: LANZ-123 updated readme -> Increases **the latest number** in your version.json file.
 
-### Remarks about your versioning
+Commit Examples:
 
-- If your version.json file has a 3 number version (`major.minor.patch`), other prefixes will create a `patch` release.
-- If your has a 4 number version (`major.minor.patch.extra`), other prefixes will increase the `extra` digit.
-
-### Conventional Commits support
-
-- commit scope is supported as: `prefix (scope): msg`
-- breaking change using exclamation mark `!` is supported as `prefix (scope)!: msg`
-
-commit examples:
-
-| Commit message                                         | Release type              |
-| ------------------------------------------------------ | ------------------------- |
-| `fix(js)!: commit type fix but with a breaking change` | major ( exclamation mark) |
-| `fix(js): commit type fix with scope js`               | patch                     |
-| `feat: commit type feat`                               | minor                     |
-| `break: commit type break`                             | major                     |
-| `docs: commit type docs`                               | patch                     |
-| `refactor: commit type refactor`                       | patch                     |
-
-## Other Use Cases
-
-| Use Case                                                                                 | Documentation                               |
-| ----------------------------------------------------------------------------------------- | ------------------------------------------- |
-| You want to provide custom conventional commits?                                          | [link](docs/custom-conventional-commits.md) |
-| You have more than one app in your repo and you want each one to have its own versioning? | [link](docs/repo-multiple-apps.md)          |
-| You want to test the javascript this repo is base                                         | [link](docs/testing-this-wsl.md)            |
+| Commit Message                                          | Changelog updated                              |
+| ------------------------------------------------------- | ---------------------------------------------- |
+| fix(app1): fixed error in the API                       | update app1/CHANGELOG.md                       |
+| feat(app2): added new feature for authentication        | update app2/CHANGELOG.md                       |
+| feat(app1, app2): added a new feature for app1 and app2 | update app1/CHANGELOG.md and app2/CHANGELOG.md |
+| fix: fixed error in app3                                | update CHANGELOG.md                            |
+| docs: updated readme                                    | update CHANGELOG.md                            |
 
 ## License Summary
 
