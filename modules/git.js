@@ -1,4 +1,6 @@
-const child = require("child_process");
+const child = require("child_process")
+const logger = require('./logger.js')
+
 const splitText = "<#@112358@#>";
 const prettyFormat = [
   "%h",
@@ -16,23 +18,6 @@ const prettyFormat = [
   "",
 ];
 
-const getCommitsInsidePullRequest = (destinationBranchName, branchName) => {
-  let mergeBaseCommit = child
-    .execSync(`git merge-base origin/${destinationBranchName} ${branchName}`)
-    .toString("utf-8")
-    .split("\n")[0];
-  let commits = child
-    .execSync(
-      `git log ${mergeBaseCommit}..${branchName} --no-merges --pretty=format:"${prettyFormat.join(
-        splitText
-      )}"`
-    )
-    .toString("utf-8")
-    .split(`${splitText}\n`)
-    .map((commitInfoText) => getCommitInfo(commitInfoText));
-
-  return commits;
-};
 const getLastCommit = () => {
   let commit = child
     .execSync(
@@ -44,6 +29,23 @@ const getLastCommit = () => {
 
   return commit;
 };
+
+const getMergedCommits = () => {
+  const lastCommit = getLastCommit()
+  logger.logKeyValuePair('last commit', lastCommit)
+
+  let changes = lastCommit.body
+    .split("\n")
+    .filter((block) => block.startsWith("* "))
+    .map((block) => block.replace("* ", ""));
+
+  if (changes.length === 0) {
+    changes = [lastCommit.subject]
+  }
+
+  return changes;
+};
+
 const getCommitInfo = (commitToParse) => {
   let commitInfoAsArray = commitToParse.split(`${splitText}`);
   var branchAndTags = commitInfoAsArray[commitInfoAsArray.length - 1]
@@ -74,7 +76,25 @@ const getCommitInfo = (commitToParse) => {
   };
 };
 
+
+function commitAndTag(commitMsg, tagMsg, tag) {
+  logger.logAction("committing and tagging locally")
+  child.execSync(`git commit -m "${commitMsg}"`)
+  child.execSync(`git tag -a -m "${tagMsg}" ${tag}`)
+
+  logger.logAction("pulling latest changes")
+  child.execSync(`git pull --ff-only`)
+
+  logger.logAction("pushing changes")
+  child.execSync(`git push --follow-tags`)
+}
+
+function addFile(file) {
+  child.execSync(`git add ${file}`)
+}
+
 module.exports = {
-  getCommitsInsidePullRequest,
-  getLastCommit,
+  getMergedCommits,
+  commitAndTag,
+  addFile
 };

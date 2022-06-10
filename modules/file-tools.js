@@ -7,15 +7,16 @@ function getJsonFrom(file) {
   }
   return jsonObject;
 }
-function saveJsonTo(file, jsonObject) {
-  fs.writeFileSync(file, jsonObject);
-}
+
 function prettifyJsonObject(obj) {
   return JSON.stringify(obj, null, 4);
 }
 
+function saveJsonTo(file, jsonObject) {
+  fs.writeFileSync(file, prettifyJsonObject(jsonObject));
+}
+
 module.exports = {
   getJsonFrom,
-  saveJsonTo,
-  prettifyJsonObject,
+  saveJsonTo
 };
