@@ -16,3 +16,4 @@ jobs:
           user-email: "github-actions@github.com"
           user-name: "github-actions"
           version-prefix: "v"
+          settings-file: "cicd/settings.json"
