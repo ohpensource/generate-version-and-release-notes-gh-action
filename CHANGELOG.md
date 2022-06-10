@@ -1,3 +1,9 @@
+# :confetti_ball: 1.0.0 (2022-06-10T10:25:57.061Z)
+- - -
+## :boom: BREAKING CHANGES
+* break: [LANZ-2679](https://ohpen.atlassian.net/browse/LANZ-2679) change input json file structure for supporting scopes. refactor of all the gh action. add scopes support. (#14)
+- - -
+- - -
 # :confetti_ball: 0.4.0 (2022-05-23T08:17:45.957Z)
 - - -
 ## :hammer: Features
