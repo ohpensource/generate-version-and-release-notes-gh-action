@@ -78,14 +78,8 @@ const getCommitInfo = (commitToParse) => {
 
 
 function commitAndTag(commitMsg, tagMsg, tag) {
-  logger.logAction("committing and tagging locally")
   child.execSync(`git commit -m "${commitMsg}"`)
   child.execSync(`git tag -a -m "${tagMsg}" ${tag}`)
-
-  logger.logAction("pulling latest changes")
-  child.execSync(`git pull --ff-only`)
-
-  logger.logAction("pushing changes")
   child.execSync(`git push --follow-tags`)
 }
 
