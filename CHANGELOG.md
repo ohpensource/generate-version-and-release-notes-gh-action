@@ -1,3 +1,10 @@
+# :confetti_ball: 1.0.1 (2022-06-10T10:32:56.423Z)
+- - -
+## :bug: Fixes
+* fix: [LANZ-2679](https://ohpen.atlassian.net/browse/LANZ-2679) removed unnecessary pulling and logging
+* fix: [LANZ-2679](https://ohpen.atlassian.net/browse/LANZ-2679) updated cd.yml to use cicd/settings-file to validate commits
+- - -
+- - -
 # :confetti_ball: 1.0.0 (2022-06-10T10:25:57.061Z)
 - - -
 ## :boom: BREAKING CHANGES
