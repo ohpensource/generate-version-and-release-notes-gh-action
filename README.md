@@ -45,7 +45,7 @@ jobs:
         with:
           user-email: "user@email.com"
           user-name: "user-name-for-git-commits"
-          skip-commit: "true"  This is for testing so you don't pollute your git history. Default value is false.
+          skip-git-commit: "true"  This is for testing so you don't pollute your git history. Default value is false.
           version-prefix: "v"  useful for repos that terraform modules where the versions are like "v0.2.4".
           settings-file: cicd/settings.json
       - name: show new version
