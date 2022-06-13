@@ -1,3 +1,9 @@
+# :confetti_ball: 1.0.2 (2022-06-13T14:49:10.875Z)
+- - -
+## :newspaper: Others
+* docs: [LANZ-2679](https://ohpen.atlassian.net/browse/LANZ-2679) fixed wrong parameter name in the example (#16)
+- - -
+- - -
 # :confetti_ball: 1.0.1 (2022-06-10T10:32:56.423Z)
 - - -
 ## :bug: Fixes
