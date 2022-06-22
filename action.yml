@@ -19,6 +19,10 @@ inputs:
   settings-file:
     description: "json files with the custom conventional commit type vs release type associated. DO NOT PROVIDE WITH ./ AT THE BEGINING"
     required: false
+  gh-token:
+    description: "gh token to create GH releases"
+    required: false
+    default: ""
 
 outputs:
   service-version:
@@ -42,3 +46,11 @@ runs:
       run: |
         echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
       shell: bash
+    - id: create-gh-release
+      if: ${{ inputs.skip-git-commit == 'false' &&  inputs.gh-token != '' }} 
+      run: |
+        echo ${{ inputs.gh-token }} | gh auth login --with-token
+        gh release create ${{ steps.service-version.outputs.service-version }} --generate-notes
+      shell: bash
+
+# todo: add changelog files as release notes
