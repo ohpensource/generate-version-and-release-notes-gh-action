@@ -12,14 +12,6 @@
 
 ## Requirements
 
-:warning: Attention! You need to merge your pull requests using the "squash" option.
-
-![settings](docs/how_to_merge_prs.png)
-
-You have to update your repo to only allow that `squash and merge`:
-
-![settings](docs/gh_repo_merge_settings.png)
-
 :warning: Your commits must follow conventional commits. To ensure that you can use our GH action to validate your PRs: [ensure-conventional-commits-gh-action](https://github.com/ohpensource/ensure-conventional-commits-gh-action/).
 
 ## How to use
