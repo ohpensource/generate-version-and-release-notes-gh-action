@@ -1,3 +1,9 @@
+# :confetti_ball: 1.1.1 (2022-07-05T10:12:16.274Z)
+- - -
+## :newspaper: Others
+* docs: [LANZ-2795](https://ohpen.atlassian.net/browse/LANZ-2795) updated readme to explain how to combine this with tf-docs (#19)
+- - -
+- - -
 # :confetti_ball: 1.1.0 (2022-07-05T09:32:27.105Z)
 - - -
 ## :hammer: Features
