@@ -30,7 +30,7 @@ jobs:
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0
-          token: ${{ secrets.CHECKOUT_WITH_A_SECRET_IF_NEEDED }}
+          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
       - uses: ohpensource/generate-version-and-release-notes-gh-action@v1.0.0
         name: semver & changelog
         id: semver
@@ -162,6 +162,50 @@ Commit Examples:
 | feat(app1, app2): added a new feature for app1 and app2 | update app1/CHANGELOG.md and app2/CHANGELOG.md |
 | fix: fixed error in app3                                | update CHANGELOG.md                            |
 | docs: updated readme                                    | update CHANGELOG.md                            |
+
+## combine it with tf-docs
+
+```yml
+name: semver
+on:
+  push:
+    branches: [main]
+jobs:
+  tfm-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the repository
+        id: checkout
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
+      - name: Render terraform docs inside the USAGE.md and push changes back to main
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          find-dir: terraform/
+          git-commit-message: "docs: updating terraform docs. [skip ci]"
+          output-method: inject
+          git-push: "true"
+
+  semver:
+    runs-on: ubuntu-latest
+    needs: tfm-docs
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
+          ref: main
+      - uses: ohpensource/generate-version-and-release-notes-gh-action@v1.1.0
+        name: semver & changelog
+        with:
+          user-email: "github-actions@github.com"
+          user-name: "github-actions"
+          version-prefix: "v"
+          settings-file: ./cicd/settings.json
+          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
+```
 
 ## License Summary
 
