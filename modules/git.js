@@ -92,7 +92,14 @@ const getCommitsSinceTag = (tag) => {
 function commitAndTag(commitMsg, tagMsg, tag) {
   child.execSync(`git commit -m "${commitMsg}"`)
   child.execSync(`git tag -a -m "${tagMsg}" ${tag}`)
-  child.execSync(`git push --follow-tags`)
+  try {
+    child.execSync(`git push --follow-tags`)
+  } catch (error) {
+    logger.logError(`error pushing tag and commit`)
+    if (!process.env.IGNORE_GIT_PUSH_ERROR) {
+      throw error
+    }
+  }
 }
 
 function addFile(file) {
