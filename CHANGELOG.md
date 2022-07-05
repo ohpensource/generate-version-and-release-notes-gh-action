@@ -1,3 +1,11 @@
+# :confetti_ball: 1.1.0 (2022-07-05T09:32:27.105Z)
+- - -
+## :hammer: Features
+* feat: [LANZ-2795](https://ohpen.atlassian.net/browse/LANZ-2795) updated commits provider. Now it will get all the commits since the last tag, this means the user is not required to merge commits as squash
+## :newspaper: Others
+* docs: [LANZ-2795](https://ohpen.atlassian.net/browse/LANZ-2795) updated readme and deleted not needed docs
+- - -
+- - -
 # :confetti_ball: 1.0.2 (2022-06-13T14:49:10.875Z)
 - - -
 ## :newspaper: Others
