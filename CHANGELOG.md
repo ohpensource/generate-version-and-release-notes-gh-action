@@ -1,3 +1,9 @@
+# :confetti_ball: 1.1.2 (2022-07-05T10:34:30.571Z)
+- - -
+## :newspaper: Others
+* docs: [LANZ-2795](https://ohpen.atlassian.net/browse/LANZ-2795) updated readme. Deleted not needed parameter mention in the example (#20)
+- - -
+- - -
 # :confetti_ball: 1.1.1 (2022-07-05T10:12:16.274Z)
 - - -
 ## :newspaper: Others
