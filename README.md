@@ -204,7 +204,6 @@ jobs:
           user-name: "github-actions"
           version-prefix: "v"
           settings-file: ./cicd/settings.json
-          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
 ```
 
 ## License Summary
