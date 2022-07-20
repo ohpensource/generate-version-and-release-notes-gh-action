@@ -15,15 +15,10 @@ const versionPrefix = process.env.VERSION_PREFIX || ""
 
 const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
-
-const lastTag = git.getLastTag()
-logger.logKeyValuePair('lastTag', lastTag)
-
-const commitsMerged = git.getCommitsSinceTag(lastTag)
+const commitsMerged = git.getMergedCommits()
 
 let commitsParsed = commitsMerged
-    .map(commit =>
-        commitParser.parseCommitMessage(commit, settings.conventionalCommits))
+    .map(commit => commitParser.parseCommitMessage(commit, settings.conventionalCommits))
 
 commitsParsed.forEach((commit, index) => logger.logKeyValuePair(`commit ${index}`, commit));
 
