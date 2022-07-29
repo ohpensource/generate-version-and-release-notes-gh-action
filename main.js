@@ -17,9 +17,17 @@ const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
 
 const lastTag = git.getLastTag()
-logger.logKeyValuePair('lastTag', lastTag)
 
-const commitsMerged = git.getCommitsSinceTag(lastTag)
+let commitsMerged = []
+if (lastTag) {
+    logger.logKeyValuePair('lastTag', lastTag)
+    commitsMerged = git.getCommitsSinceTag(lastTag)
+} else {
+    logger.logAction('no last tag. getting all commits')
+    commitsMerged = git.getAllCommits()
+}
+
+
 
 let commitsParsed = commitsMerged
     .map(commit =>

@@ -46,7 +46,7 @@ jobs:
 
 The action will:
 
-- Analyse the commits from the pull request that has been merged to `main` branch and extract the necessary information.
+- Analyse the commits since the last tag and extract the necessary information. If there is no last tag defined, it will use all the commits available.
 - Summarize all the pull request changes into your `CHANGELOG.md` file.
 - Deduce the new version from the commits merged.
 - Commit, tag and push changes in version.json and CHANGELOG.md (you can skip this part by setting parameter _skip-git-commit_ to true, for example when you want to change more files and push changes in one commit by yourself)
