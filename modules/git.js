@@ -89,6 +89,34 @@ const getCommitsSinceTag = (tag) => {
   return changes;
 };
 
+const getAllCommits = () => {
+  let commits = child
+    .execSync(
+      `git log --all --no-merges --pretty=format:"${prettyFormat.join(
+        splitText
+      )}"`
+    )
+    .toString("utf-8")
+    .split(`${splitText}\n`)
+    .map((commitInfoText) => getCommitInfo(commitInfoText));
+
+  if (commits.length === 1 && commits[0].shortHash === "") {
+    return []
+  }
+
+  let changes = []
+  commits.forEach(x => {
+    if (x.body !== '') {
+      const commitMsgsSquashed = parseCommitMsgsSquashed(x)
+      changes = changes.concat(commitMsgsSquashed)
+    } else {
+      changes.push(x.subject)
+    }
+  })
+
+  return changes;
+};
+
 function commitAndTag(commitMsg, tagMsg, tag) {
   child.execSync(`git commit -m "${commitMsg}"`)
   child.execSync(`git tag -a -m "${tagMsg}" ${tag}`)
@@ -101,6 +129,7 @@ function addFile(file) {
 
 module.exports = {
   getCommitsSinceTag,
+  getAllCommits,
   commitAndTag,
   addFile,
   getLastTag
