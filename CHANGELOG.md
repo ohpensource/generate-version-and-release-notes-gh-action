@@ -1,3 +1,9 @@
+# :confetti_ball: 1.1.3 (2022-08-01T06:56:25.826Z)
+- - -
+## :bug: Fixes
+* fix: [LANZ-3003](https://ohpen.atlassian.net/browse/LANZ-3003) fixed error when there is not tag defined (#23)
+- - -
+- - -
 # :confetti_ball: 1.1.2 (2022-07-05T10:34:30.571Z)
 - - -
 ## :newspaper: Others
