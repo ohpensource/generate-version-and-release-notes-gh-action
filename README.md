@@ -40,6 +40,7 @@ jobs:
           skip-git-commit: "true"  This is for testing so you don't pollute your git history. Default value is false.
           version-prefix: "v"  useful for repos that terraform modules where the versions are like "v0.2.4".
           settings-file: cicd/settings.json
+          base-path: useful if you need to place the version and changelog files out of root folder. 
       - name: show new version
         run: echo "version released: ${{ steps.semver.outputs.service-version }}"
 ```
@@ -59,10 +60,11 @@ The action will:
 }
 ```
 
-- There are 3 optional parameters in this action:
+- There are 4 optional parameters in this action:
 
 > **skip-commit**: use it with value "true" if you want to prevent the action from committing.
 > **version-prefix**: use with a value different than an empty string ("beta-" or "v" for example) to have tags in the form of '{version-prefix}M.m.p'
+> **base-path**: use it if you want to place version and changelog files out of root folder.
 > **settings-file**: path to a JSON file where you can define your custom conventional commits and scopes. Next is an example:
 
 ```json

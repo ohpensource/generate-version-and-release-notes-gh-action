@@ -12,6 +12,7 @@ const DEFAULT_INITIAL_VERSION = "0.0.0"
 const SCOPE_EMPTY = `SCOPE_EMPTY_${new Date()}`
 const skipGitCommit = process.env.SKIP_GIT_COMMIT === 'true'
 const versionPrefix = process.env.VERSION_PREFIX || ""
+const basePath = process.env.BASE_PATH
 
 const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
@@ -27,7 +28,8 @@ if (lastTag) {
     commitsMerged = git.getAllCommits()
 }
 
-
+let versionFilePath = `./${basePath}/${VERSION_FILE}`
+let changelogFilePath = `./${basePath}/${CHANGELOG_FILE}`
 
 let commitsParsed = commitsMerged
     .map(commit =>
@@ -35,7 +37,7 @@ let commitsParsed = commitsMerged
 
 commitsParsed.forEach((commit, index) => logger.logKeyValuePair(`commit ${index}`, commit));
 
-const previousVersion = fileTools.getJsonFrom(VERSION_FILE)?.version ?? DEFAULT_INITIAL_VERSION
+const previousVersion = fileTools.getJsonFrom(versionFilePath)?.version ?? DEFAULT_INITIAL_VERSION
 
 const changesDone = commitsParsed.map(x => x.release)
 const newVersion = semver.calculateNextVersion(previousVersion, changesDone)
@@ -43,10 +45,10 @@ logger.logKeyValuePair(`newVersion`, newVersion)
 
 logger.logTitle("UPDATING VERSION FILE")
 fileTools.saveJsonTo(
-    VERSION_FILE,
+    versionFilePath,
     { version: newVersion }
 )
-git.addFile(VERSION_FILE)
+git.addFile(versionFilePath)
 
 let scopes = commitsParsed.map(x => x.scopes).flat(1)
 scopes = [...new Set(scopes), SCOPE_EMPTY]
@@ -62,7 +64,7 @@ scopes.forEach(scope => {
         commitsParsed.filter(x => x.scopes.includes(scope))
 
     const changelog = scope === SCOPE_EMPTY ?
-        CHANGELOG_FILE :
+        changelogFilePath :
         `${settings.scopes[scope].folderPattern}/${CHANGELOG_FILE}`
 
     if (commits.length > 0) {
