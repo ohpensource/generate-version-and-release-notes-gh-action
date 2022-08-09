@@ -10,7 +10,6 @@ const CHANGELOG_FILE = "CHANGELOG.md"
 const VERSION_FILE = "version.json"
 const DEFAULT_INITIAL_VERSION = "0.0.0"
 const SCOPE_EMPTY = `SCOPE_EMPTY_${new Date()}`
-const skipGitCommit = process.env.SKIP_GIT_COMMIT === 'true'
 const versionPrefix = process.env.VERSION_PREFIX || ""
 const basePath = process.env.BASE_PATH
 
@@ -42,6 +41,8 @@ const previousVersion = fileTools.getJsonFrom(versionFilePath)?.version ?? DEFAU
 const changesDone = commitsParsed.map(x => x.release)
 const newVersion = semver.calculateNextVersion(previousVersion, changesDone)
 logger.logKeyValuePair(`newVersion`, newVersion)
+
+console.log(`::set-output name=new-version::${newVersion}`)
 
 logger.logTitle("UPDATING VERSION FILE")
 fileTools.saveJsonTo(
@@ -75,15 +76,3 @@ scopes.forEach(scope => {
         git.addFile(changelog)
     }
 })
-
-if (!skipGitCommit) {
-
-    logger.logTitle("COMMITTING AND TAGGING");
-    logger.logKeyValuePair("versionPrefix", versionPrefix)
-    logger.logKeyValuePair("newVersion", newVersion)
-
-    const tag = `${versionPrefix}${newVersion}`
-    const commitMsg = `[skip ci] Bump to version ${tag}`
-    const tagMsg = `Tag for version ${tag}`
-    git.commitAndTag(commitMsg, tagMsg, tag)
-}

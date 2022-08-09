@@ -22,6 +22,9 @@ inputs:
   base-path:
     description: "path where it will be located version and changelog files. DO NOT PROVIDE WITH ./ AT THE BEGINING"
     required: false
+  post-script:
+    description: "If it is provided the script(js) it will be executed before commit and tag"
+    required: false
 
 outputs:
   service-version:
@@ -32,15 +35,33 @@ runs:
   using: "composite"
   steps:
     - name: 'Generate Version And Release Notes'
+      id: generate-version-and-release-notes
       env:
-        SKIP_GIT_COMMIT: ${{ inputs.skip-git-commit }} 
         VERSION_PREFIX: ${{ inputs.version-prefix }}
         SETTINGS_FILE: ${{ inputs.settings-file }}
         BASE_PATH: ${{ inputs.base-path }}
       run: |
+        node ${{ github.action_path }}/main.js
+      shell: bash
+    - name: 'Execute Post Script'
+      if: ${{ inputs.post-script }}
+      env:
+        VERSION_PREFIX: ${{ inputs.version-prefix }}
+        SETTINGS_FILE: ${{ inputs.settings-file }}
+        BASE_PATH: ${{ inputs.base-path }}
+        NEW_VERSION: ${{ steps.generate-version-and-release-notes.outputs.new-version }}
+      run: |
+        node ${{ inputs.post-script }}
+      shell: bash
+    - name: 'Commit And Tag Version And Release Notes'
+      env:
+        VERSION_PREFIX: ${{ inputs.version-prefix }}
+        SKIP_GIT_COMMIT: ${{ inputs.skip-git-commit }} 
+        NEW_VERSION: ${{ steps.generate-version-and-release-notes.outputs.new-version }}
+      run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}
-        node ${{ github.action_path }}/main.js
+        node ${{ github.action_path }}/commit-and-tag.js
       shell: bash
     - id: service-version
       run: |
