@@ -116,7 +116,7 @@ If no `conventionalCommits` are defined in the `settings-file`, the commit types
         "release": "minor"
     },
     "fix": {
-        "release": "fix"
+        "release": "patch"
     },
     "build": {
         "release": "none"
