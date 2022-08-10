@@ -9,7 +9,7 @@ const DEFAULT_CONVENTIONAL_COMMITS = {
         "release": "minor"
     },
     "fix": {
-        "release": "fix"
+        "release": "patch"
     },
     "build": {
         "release": "none"
