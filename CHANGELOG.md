@@ -1,3 +1,9 @@
+# :confetti_ball: 1.1.4 (2022-08-10T10:33:53.386Z)
+- - -
+## :bug: Fixes
+* fix: [LANZ-3045](https://ohpen.atlassian.net/browse/LANZ-3045) fixed error in the default values for conventional commit releases (#24)
+- - -
+- - -
 # :confetti_ball: 1.1.3 (2022-08-01T06:56:25.826Z)
 - - -
 ## :bug: Fixes
