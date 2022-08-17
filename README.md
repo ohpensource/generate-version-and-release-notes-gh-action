@@ -86,13 +86,16 @@ The action will:
     },
     "scopes": {
         "app1": {
-            "folderPattern": "app1"
+            "folderPattern": "app1",
+            "versioning": true
         },
         "app2": {
-            "folderPattern": "app2"
+            "folderPattern": "app2",
+            "versioning": true
         },
         "app3": {
-            "folderPattern": "app3"
+            "folderPattern": "app3",
+            "versioning": true
         }
     }
 }
@@ -100,10 +103,11 @@ The action will:
 
 * Custom conventional commits settings (key: `conventionalCommits`).
   * List of prefixes that commits must start with. Examples: `break,feat,fix`
-  * For every prefix, the release type based on the semantic versioner must be provided. Valid values are: `major,minor,patch,none`. key: `release`
+  * For every prefix, the release type based on the semantic versioner must be provided. Valid values are: `major, minor, patch, none`. key: `release`
 * Scopes list (key: `scopes`):
-  * Every scope should have a `folderPattern` where a specific CHANGELOG.md will be updated with the commits that contain that scope.
-  * If a commit does not provide a scope. The root changelog will be updated.
+  * Every scope MUST have a `folderPattern` where a specific CHANGELOG.md will be updated with the commits that contain that scope.
+  * If a commit does not provide a scope it will be listed in the root changelog.
+  * Optionally, `versioning` per scope is supported by setting `versioning: true` in the scope properties, if not provided, the default value is _false_. It works as next: If a commit with the scope is merged, the new version will be calculated and stored in a  _version.json_ file located in the `folderPattern` directory. Commits will be analyzed following `conventionalCommits` settings.
 
 If no `conventionalCommits` are defined in the `settings-file`, the commit types (prefixes) accepted would be:
 
