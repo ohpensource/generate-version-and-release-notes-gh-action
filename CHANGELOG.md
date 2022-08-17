@@ -1,3 +1,9 @@
+# :confetti_ball: 1.2.0 (2022-08-17T13:45:31.370Z)
+- - -
+## :hammer: Features
+* feat: [LANZ-3056](https://ohpen.atlassian.net/browse/LANZ-3056) updated workflow to create version.json per scope - approach 1 (#26)
+- - -
+- - -
 # :confetti_ball: 1.1.4 (2022-08-10T10:33:53.386Z)
 - - -
 ## :bug: Fixes
