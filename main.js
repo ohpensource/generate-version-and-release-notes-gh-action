@@ -1,3 +1,4 @@
+const core = require('@actions/core');
 const git = require("./modules/git.js")
 const logger = require("./modules/logger.js")
 const commitParser = require("./modules/commit-parser.js")
@@ -6,12 +7,14 @@ const fileTools = require("./modules/file-tools.js");
 const semver = require("./modules/semver.js")
 const changelogBuilder = require("./modules/changelog-builder.js")
 
+
 const CHANGELOG_FILE = "CHANGELOG.md"
 const VERSION_FILE = "version.json"
 const DEFAULT_INITIAL_VERSION = "0.0.0"
 const SCOPE_EMPTY = `SCOPE_EMPTY_${new Date()}`
 const skipGitCommit = process.env.SKIP_GIT_COMMIT === 'true'
 const versionPrefix = process.env.VERSION_PREFIX || ""
+let executionSummary = `# semver summary\n`
 
 const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
@@ -47,6 +50,7 @@ fileTools.saveJsonTo(
     { version: newVersionRepo }
 )
 git.addFile(VERSION_FILE)
+executionSummary.append(`new version: ${newVersionRepo}\n`)
 
 let scopes = commitsParsed.map(x => x.scopes).flat(1)
 scopes = [...new Set(scopes), SCOPE_EMPTY]
@@ -78,6 +82,7 @@ scopes.forEach(scope => {
                 { version: newVersionForScope }
             )
             git.addFile(versionJsonPath)
+            executionSummary.append(`* new ${scope} version: ${newVersionForScope}\n`)
         }
         changelogBuilder.updateChangelog(changelog, newVersionForScope, commits)
         git.addFile(changelog)
