@@ -35,16 +35,16 @@ let commitsParsed = commitsMerged
 
 commitsParsed.forEach((commit, index) => logger.logKeyValuePair(`commit ${index}`, commit));
 
-const previousVersion = fileTools.getJsonFrom(VERSION_FILE)?.version ?? DEFAULT_INITIAL_VERSION
+const previousVersionRepo = fileTools.getJsonFrom(VERSION_FILE)?.version ?? DEFAULT_INITIAL_VERSION
 
 const changesDone = commitsParsed.map(x => x.release)
-const newVersion = semver.calculateNextVersion(previousVersion, changesDone)
-logger.logKeyValuePair(`newVersion`, newVersion)
+const newVersionRepo = semver.calculateNextVersion(previousVersionRepo, changesDone)
+logger.logKeyValuePair(`newVersionRepo`, newVersionRepo)
 
 logger.logTitle("UPDATING VERSION FILE")
 fileTools.saveJsonTo(
     VERSION_FILE,
-    { version: newVersion }
+    { version: newVersionRepo }
 )
 git.addFile(VERSION_FILE)
 
@@ -64,12 +64,32 @@ scopes.forEach(scope => {
     const changelog = scope === SCOPE_EMPTY ?
         CHANGELOG_FILE :
         `${settings.scopes[scope].folderPattern}/${CHANGELOG_FILE}`
+    const versioningEnable = scope === SCOPE_EMPTY ?
+        false :
+        settings.scopes[scope].versioning || false
 
     if (commits.length > 0) {
+        let newVersionForScope = newVersionRepo
+
+        if (versioningEnable) {
+            const versionJsonPath = `${settings.scopes[scope].folderPattern}/${VERSION_FILE}`
+            const previousVersion = fileTools.getJsonFrom(versionJsonPath)?.version ?? DEFAULT_INITIAL_VERSION
+            const changesDone = commits.map(x => x.release)
+            const newVersionForScope = semver.calculateNextVersion(previousVersion, changesDone)
+            logger.logKeyValuePair(`new version for scope:${scope}`, newVersionForScope)
+
+            logger.logTitle(`UPDATING VERSION FILE ${versionJsonPath}`)
+            fileTools.saveJsonTo(
+                versionJsonPath,
+                { version: newVersionForScope }
+            )
+            git.addFile(versionJsonPath)
+        }
+
         logger.logTitle(`UPDATING CHANGELOG FILE: ${changelog}`)
         logger.logKeyValuePair(`commits for changelog`, commits)
 
-        changelogBuilder.updateChangelog(changelog, newVersion, commits)
+        changelogBuilder.updateChangelog(changelog, newVersionForScope, commits)
         git.addFile(changelog)
     }
 })
@@ -78,9 +98,9 @@ if (!skipGitCommit) {
 
     logger.logTitle("COMMITTING AND TAGGING");
     logger.logKeyValuePair("versionPrefix", versionPrefix)
-    logger.logKeyValuePair("newVersion", newVersion)
+    logger.logKeyValuePair("newVersion", newVersionRepo)
 
-    const tag = `${versionPrefix}${newVersion}`
+    const tag = `${versionPrefix}${newVersionRepo}`
     const commitMsg = `[skip ci] Bump to version ${tag}`
     const tagMsg = `Tag for version ${tag}`
     git.commitAndTag(commitMsg, tagMsg, tag)
