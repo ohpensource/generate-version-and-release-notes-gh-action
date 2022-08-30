@@ -1,3 +1,9 @@
+# :confetti_ball: 1.2.1 (2022-08-30T10:30:52.641Z)
+- - -
+## :newspaper: Others
+* docs: [LANZ-3112](https://ohpen.atlassian.net/browse/LANZ-3112) updated readme with valid scopes format (#28)
+- - -
+- - -
 # :confetti_ball: 1.2.0 (2022-08-17T13:45:31.370Z)
 - - -
 ## :hammer: Features
