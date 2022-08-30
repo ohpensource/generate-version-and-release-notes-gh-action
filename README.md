@@ -105,7 +105,8 @@ The action will:
             "folderPattern": "app3",
             "versioning": true
         }
-    }
+    },
+    "scopesDiscovery": true
 }
 ```
 
@@ -116,6 +117,7 @@ The action will:
   * Every scope MUST have a `folderPattern` where a specific CHANGELOG.md will be updated with the commits that contain that scope.
   * If a commit does not provide a scope it will be listed in the root changelog.
   * Optionally, `versioning` per scope is supported by setting `versioning: true` in the scope properties, if not provided, the default value is _false_. It works as next: If a commit with the scope is merged, the new version will be calculated and stored in a  _version.json_ file located in the `folderPattern` directory. Commits will be analyzed following `conventionalCommits` settings.
+* Scopes discovery (key: `scopesDiscovery`): Specify if scopes will be discovered although are not present on commit message. The default value is false.
 
 If no `conventionalCommits` are defined in the `settings-file`, the commit types (prefixes) accepted would be:
 

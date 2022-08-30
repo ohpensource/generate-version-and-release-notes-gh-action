@@ -41,7 +41,8 @@ getSettings = (settingsFile) => {
 
     let result = {
         conventionalCommits: DEFAULT_CONVENTIONAL_COMMITS,
-        scopes: {}
+        scopes: {},
+        scopesDiscovery: false
     }
 
     if (settingsFile && !fs.existsSync(settingsFile)) {
@@ -52,6 +53,7 @@ getSettings = (settingsFile) => {
         const jsonData = fileTools.getJsonFrom(settingsFile)
         result.conventionalCommits = jsonData?.conventionalCommits ?? DEFAULT_CONVENTIONAL_COMMITS
         result.scopes = jsonData?.scopes ?? {}
+        result.scopesDiscovery = jsonData?.scopesDiscovery ?? false
     }
 
     return result

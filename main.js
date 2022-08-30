@@ -17,9 +17,9 @@ const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
 const commitsMerged = git.getChangesFromLastCommit() // changes MUST be squashed into the last commit
 
-let commitsParsed = commitsMerged
+let commitsParsed = commitsMerged.changes
     .map(commit =>
-        commitParser.parseCommitMessage(commit, settings.conventionalCommits))
+        commitParser.parseCommitMessage(commit, commitsMerged.shortHash, settings))
 
 commitsParsed.forEach((commit, index) => logger.logKeyValuePair(`commit ${index}`, commit));
 
