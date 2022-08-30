@@ -159,13 +159,15 @@ examples:
 
 Commit Examples:
 
-| Commit Message                                          | Changelog updated                              |
-| ------------------------------------------------------- | ---------------------------------------------- |
-| fix(app1): fixed error in the API                       | update app1/CHANGELOG.md                       |
-| feat(app2): added new feature for authentication        | update app2/CHANGELOG.md                       |
-| feat(app1, app2): added a new feature for app1 and app2 | update app1/CHANGELOG.md and app2/CHANGELOG.md |
-| fix: fixed error in app3                                | update CHANGELOG.md                            |
-| docs: updated readme                                    | update CHANGELOG.md                            |
+| Commit Message                                         | Changelog updated                              |
+| ------------------------------------------------------ | ---------------------------------------------- |
+| fix(app1): fixed error in the API                      | update app1/CHANGELOG.md                       |
+| feat(app2): added new feature for authentication       | update app2/CHANGELOG.md                       |
+| feat(app1,app2): added a new feature for app1 and app2 | update app1/CHANGELOG.md and app2/CHANGELOG.md |
+| fix: fixed error in app3                               | update CHANGELOG.md                            |
+| docs: updated readme                                   | update CHANGELOG.md                            |
+
+  :warning: Attention! scope list must be provided as a comma-separated values without spaces in between as the next example:  `feat(app-1,app-2,app-3): updated all apps`
 
 ## combine it with tf-docs
 
