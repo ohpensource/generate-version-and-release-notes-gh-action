@@ -12,6 +12,14 @@
 
 ## Requirements
 
+:warning: Attention! You need to merge your pull requests using the "squash" option.
+
+![settings](docs/how_to_merge_prs.png)
+
+You have to update your repo to only allow that `squash and merge`:
+
+![settings](docs/gh_repo_merge_settings.png)
+
 :warning: Your commits must follow conventional commits. To ensure that you can use our GH action to validate your PRs: [ensure-conventional-commits-gh-action](https://github.com/ohpensource/ensure-conventional-commits-gh-action/).
 
 ## How to use
@@ -168,49 +176,6 @@ Commit Examples:
 | docs: updated readme                                   | update CHANGELOG.md                            |
 
   :warning: Attention! scope list must be provided as a comma-separated values without spaces in between as the next example:  `feat(app-1,app-2,app-3): updated all apps`
-
-## combine it with tf-docs
-
-```yml
-name: semver
-on:
-  push:
-    branches: [main]
-jobs:
-  tfm-docs:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout the repository
-        id: checkout
-        uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
-      - name: Render terraform docs inside the USAGE.md and push changes back to main
-        uses: terraform-docs/gh-actions@v1.0.0
-        with:
-          find-dir: terraform/
-          git-commit-message: "docs: updating terraform docs. [skip ci]"
-          output-method: inject
-          git-push: "true"
-
-  semver:
-    runs-on: ubuntu-latest
-    needs: tfm-docs
-    steps:
-      - uses: actions/checkout@v2
-        with:
-          fetch-depth: 0
-          token: ${{ secrets.CICD_GITHUB_REPOSITORY_TOKEN }}
-          ref: main
-      - uses: ohpensource/generate-version-and-release-notes-gh-action@v1.1.0
-        name: semver & changelog
-        with:
-          user-email: "github-actions@github.com"
-          user-name: "github-actions"
-          version-prefix: "v"
-          settings-file: ./cicd/settings.json
-```
 
 ## License Summary
 

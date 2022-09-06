@@ -15,19 +15,7 @@ const versionPrefix = process.env.VERSION_PREFIX || ""
 
 const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
-
-const lastTag = git.getLastTag()
-
-let commitsMerged = []
-if (lastTag) {
-    logger.logKeyValuePair('lastTag', lastTag)
-    commitsMerged = git.getCommitsSinceTag(lastTag)
-} else {
-    logger.logAction('no last tag. getting all commits')
-    commitsMerged = git.getAllCommits()
-}
-
-
+const commitsMerged = git.getChangesFromLastCommit() // changes MUST be squashed into the last commit
 
 let commitsParsed = commitsMerged
     .map(commit =>
