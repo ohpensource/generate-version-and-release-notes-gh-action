@@ -1,3 +1,9 @@
+# :confetti_ball: 2.0.0 (2022-09-06T12:01:27.736Z)
+- - -
+## :boom: BREAKING CHANGES
+* break: [LANZ-2959](https://ohpen.atlassian.net/browse/LANZ-2959) set commit reading behavior to initial approach: parse the commit messages from the last commit merged. This one must be a squash (#27)
+- - -
+- - -
 # :confetti_ball: 1.2.1 (2022-08-30T10:30:52.641Z)
 - - -
 ## :newspaper: Others
