@@ -18,6 +18,34 @@ const prettyFormat = [
   "",
 ];
 
+const getLastCommit = () => {
+  let commit = child
+    .execSync(
+      `git log HEAD^1..HEAD --pretty=format:"${prettyFormat.join(splitText)}"`
+    )
+    .toString("utf-8")
+    .split(`${splitText}\n`)
+    .map((commitInfoText) => getCommitInfo(commitInfoText))[0];
+
+  return commit;
+};
+
+const getChangesFromLastCommit = () => {
+  const lastCommit = getLastCommit()
+  logger.logKeyValuePair('last commit', lastCommit)
+
+  let changes = lastCommit.body
+    .split("\n")
+    .filter((block) => block.startsWith("* "))
+    .map((block) => block.replace("* ", ""));
+
+  if (changes.length === 0) {
+    changes = [lastCommit.subject]
+  }
+
+  return changes;
+};
+
 const getCommitInfo = (commitToParse) => {
   let commitInfoAsArray = commitToParse.split(`${splitText}`);
   var branchAndTags = commitInfoAsArray[commitInfoAsArray.length - 1]
@@ -48,74 +76,6 @@ const getCommitInfo = (commitToParse) => {
   };
 };
 
-getLastTag = () => child
-  .execSync(`git tag --sort=-version:refname| head -n 1`)
-  .toString("utf-8")
-  .split(`\n`)
-  .filter(x => x.toString().length > 0)[0]
-
-function parseCommitMsgsSquashed(commit) {
-  return commit.body
-    .split("\n")
-    .filter((block) => block.startsWith("* "))
-    .map((block) => block.replace("* ", ""));
-}
-
-const getCommitsSinceTag = (tag) => {
-  let commits = child
-    .execSync(
-      `git log ${tag}..HEAD --no-merges --pretty=format:"${prettyFormat.join(
-        splitText
-      )}"`
-    )
-    .toString("utf-8")
-    .split(`${splitText}\n`)
-    .map((commitInfoText) => getCommitInfo(commitInfoText));
-
-  if (commits.length === 1 && commits[0].shortHash === "") {
-    return []
-  }
-
-  let changes = []
-  commits.forEach(x => {
-    if (x.body !== '') {
-      const commitMsgsSquashed = parseCommitMsgsSquashed(x)
-      changes = changes.concat(commitMsgsSquashed)
-    } else {
-      changes.push(x.subject)
-    }
-  })
-
-  return changes;
-};
-
-const getAllCommits = () => {
-  let commits = child
-    .execSync(
-      `git log --all --no-merges --pretty=format:"${prettyFormat.join(
-        splitText
-      )}"`
-    )
-    .toString("utf-8")
-    .split(`${splitText}\n`)
-    .map((commitInfoText) => getCommitInfo(commitInfoText));
-
-  if (commits.length === 1 && commits[0].shortHash === "") {
-    return []
-  }
-
-  let changes = []
-  commits.forEach(x => {
-    if (x.body !== '') {
-      const commitMsgsSquashed = parseCommitMsgsSquashed(x)
-      changes = changes.concat(commitMsgsSquashed)
-    } else {
-      changes.push(x.subject)
-    }
-  })
-
-  return changes;
-};
 
 function commitAndTag(commitMsg, tagMsg, tag) {
   child.execSync(`git commit -m "${commitMsg}"`)
@@ -128,9 +88,7 @@ function addFile(file) {
 }
 
 module.exports = {
-  getCommitsSinceTag,
-  getAllCommits,
+  getChangesFromLastCommit,
   commitAndTag,
-  addFile,
-  getLastTag
+  addFile
 };
