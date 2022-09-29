@@ -1,3 +1,9 @@
+# :confetti_ball: 2.1.0 (2022-09-29T13:11:48.393Z)
+- - -
+## :hammer: Features
+* feat: [SPT-440](https://ohpen.atlassian.net/browse/SPT-440) - Add scopesDiscovery parameter (#29)
+- - -
+- - -
 # :confetti_ball: 2.0.0 (2022-09-06T12:01:27.736Z)
 - - -
 ## :boom: BREAKING CHANGES
