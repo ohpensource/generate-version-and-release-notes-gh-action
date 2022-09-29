@@ -40,10 +40,13 @@ const getChangesFromLastCommit = () => {
     .map((block) => block.replace("* ", ""));
 
   if (changes.length === 0) {
-    changes = [lastCommit.subject]
+    changes = new Array(lastCommit.subject)
   }
 
-  return changes;
+  return {
+    shortHash: lastCommit.shortHash,
+    changes: changes
+  };
 };
 
 const getCommitInfo = (commitToParse) => {
@@ -77,6 +80,12 @@ const getCommitInfo = (commitToParse) => {
 };
 
 
+const getFilesModifiedInACommit = (commitHash) => child
+.execSync(`git diff-tree --no-commit-id --name-only -r ${commitHash}`)
+.toString("utf-8")
+.split("\n")
+.filter(line => line.length > 0)
+
 function commitAndTag(commitMsg, tagMsg, tag) {
   child.execSync(`git commit -m "${commitMsg}"`)
   child.execSync(`git tag -a -m "${tagMsg}" ${tag}`)
@@ -90,5 +99,6 @@ function addFile(file) {
 module.exports = {
   getChangesFromLastCommit,
   commitAndTag,
-  addFile
+  addFile,
+  getFilesModifiedInACommit
 };
