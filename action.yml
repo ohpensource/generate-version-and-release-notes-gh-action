@@ -40,5 +40,5 @@ runs:
       shell: bash
     - id: service-version
       run: |
-        echo "::set-output name=service-version::$(cat ./version.json | jq -r '.version')"
+        echo "service-version=$(cat ./version.json | jq -r '.version')" >> $GITHUB_OUTPUT
       shell: bash
