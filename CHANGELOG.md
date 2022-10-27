@@ -1,3 +1,9 @@
+# :confetti_ball: 2.1.1 (2022-10-27T10:33:21.071Z)
+- - -
+## :bug: Fixes
+* fix: [LANZ-3338](https://ohpen.atlassian.net/browse/LANZ-3338) updated how outputs are been set. now they are stored in GITHUB_OUTPUT (#30)
+- - -
+- - -
 # :confetti_ball: 2.1.0 (2022-09-29T13:11:48.393Z)
 - - -
 ## :hammer: Features
