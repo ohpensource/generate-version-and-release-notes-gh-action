@@ -20,6 +20,7 @@ logger.logKeyValuePair('settings', settings)
 
 let commitChanges;
 if (baseCommitSha) {
+	logger.logKeyValuePair('Changes for commit: ', baseCommitSha)
 	commitChanges = git.getChangesSinceCommitSha(baseCommitSha)
 } else {
 	commitChanges = git.getChangesFromLastCommit() // changes MUST be squashed into the last commit
