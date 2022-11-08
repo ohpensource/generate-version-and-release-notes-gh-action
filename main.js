@@ -13,13 +13,21 @@ const SCOPE_EMPTY = `SCOPE_EMPTY_${new Date()}`
 const skipGitCommit = process.env.SKIP_GIT_COMMIT === 'true'
 const versionPrefix = process.env.VERSION_PREFIX || ""
 
+const baseCommitSha = process.env.BASE_COMMIT_SHA
+
 const settings = settingsProvider.getSettings(process.env.SETTINGS_FILE)
 logger.logKeyValuePair('settings', settings)
-const commitsMerged = git.getChangesFromLastCommit() // changes MUST be squashed into the last commit
 
-let commitsParsed = commitsMerged.changes
-    .map(commit =>
-        commitParser.parseCommitMessage(commit, commitsMerged.shortHash, settings))
+let commitChanges;
+if (baseCommitSha) {
+	commitChanges = git.getChangesSinceCommitSha(baseCommitHash)
+} else {
+	commitChanges = git.getChangesFromLastCommit() // changes MUST be squashed into the last commit
+}
+
+let commitsParsed = commitChanges
+	.map(ch =>
+			 commitParser.parseCommitMessage(ch.message, ch.commit.shortHash, settings))
 
 commitsParsed.forEach((commit, index) => logger.logKeyValuePair(`commit ${index}`, commit));
 
