@@ -1,3 +1,15 @@
+# :confetti_ball: 2.2.0 (2022-11-08T09:18:22.042Z)
+- - -
+## :hammer: Features
+* feat: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) - allow define "base-commit-sha" for repositories which not use squash commits
+## :bug: Fixes
+* fix: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) - fix name of baseCommitSha local variable
+* fix: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) - added log message if generate changes from commit SHA
+## :newspaper: Others
+* build: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) update GIT ignore
+* docs: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) - describe new "base-commit-sha" input parameter
+- - -
+- - -
 # :confetti_ball: 2.1.1 (2022-10-27T10:33:21.071Z)
 - - -
 ## :bug: Fixes
