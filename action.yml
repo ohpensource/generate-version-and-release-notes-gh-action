@@ -19,6 +19,9 @@ inputs:
   settings-file:
     description: "json files with the custom conventional commit type vs release type associated. DO NOT PROVIDE WITH ./ AT THE BEGINING"
     required: false
+  base-commit-sha:
+    description: "base commit hash"
+    required: false
 
 outputs:
   service-version:
@@ -33,6 +36,7 @@ runs:
         SKIP_GIT_COMMIT: ${{ inputs.skip-git-commit }} 
         VERSION_PREFIX: ${{ inputs.version-prefix }}
         SETTINGS_FILE: ${{ inputs.settings-file }}
+        BASE_COMMIT_SHA: ${{ inputs.base-commit-sha }}
       run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}

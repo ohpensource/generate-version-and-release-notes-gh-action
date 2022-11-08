@@ -45,11 +45,13 @@ jobs:
         with:
           user-email: "user@email.com"
           user-name: "user-name-for-git-commits"
-          skip-git-commit: "true"  This is for testing so you don't pollute your git history. Default value is false.
-          version-prefix: "v"  useful for repos that terraform modules where the versions are like "v0.2.4".
+          skip-git-commit: "true"  # This is for testing so you don't pollute your git history. Default value is false.
+          version-prefix: "v"  # useful for repos that terraform modules where the versions are like "v0.2.4".
           settings-file: cicd/settings.json
+          base-commit-sha: ${{ github.event.pull_request.base.sha || github.event.before }} # if project not use squash commits
       - name: show new version
-        run: echo "version released: ${{ steps.semver.outputs.service-version }}"
+        run: |
+          echo "version released: ${{ steps.semver.outputs.service-version }}"
 ```
 
 The action will:
@@ -67,10 +69,11 @@ The action will:
 }
 ```
 
-- There are 3 optional parameters in this action:
+- There are several optional parameters in this action:
 
 > **skip-commit**: use it with value "true" if you want to prevent the action from committing.
 > **version-prefix**: use with a value different than an empty string ("beta-" or "v" for example) to have tags in the form of '{version-prefix}M.m.p'
+> **base-commit-sha**: if project not use squash commits or if plugin is used in pull_request workflows
 > **settings-file**: path to a JSON file where you can define your custom conventional commits and scopes. Next is an example:
 
 ```json
