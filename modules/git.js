@@ -35,7 +35,7 @@ const getChangesFromLastCommit = () => {
 	let changes = parseCommitMsgsSquashed(lastCommit)
 
 	if (changes.length === 0) {
-		changes = new Array(mapToChange(lastCommit, lastCommit.subject))
+		changes = new Array(lastCommit.subject)
 	}
 
 	let result = []
