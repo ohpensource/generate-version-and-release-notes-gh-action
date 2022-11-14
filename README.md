@@ -12,7 +12,7 @@
 
 ## Requirements
 
-:warning: Attention! You need to merge your pull requests using the "squash" option.
+:warning: Attention! You need to merge your pull requests using the "squash" option. This is not necessary if you use **base-commit-sha** option
 
 ![settings](docs/how_to_merge_prs.png)
 
