@@ -1,3 +1,11 @@
+# :confetti_ball: 2.2.1 (2022-11-14T08:10:21.449Z)
+- - -
+## :bug: Fixes
+* fix: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) - fix problem with commits which not contains squash formatted commit message
+## :newspaper: Others
+* docs: [SPT-456](https://ohpen.atlassian.net/browse/SPT-456) - information about "base-commit-sha" option which disabled squash pull_request merging
+- - -
+- - -
 # :confetti_ball: 2.2.0 (2022-11-08T09:18:22.042Z)
 - - -
 ## :hammer: Features
