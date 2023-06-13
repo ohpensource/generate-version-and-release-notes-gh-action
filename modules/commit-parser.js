@@ -8,7 +8,7 @@ const parseCommitMessage = (commitMsg, commitHash, settings) => {
   let result = {
     body: commitMsg,
     type: "",
-    release: "none",
+    release: "patch",
     scopes: []
   }
 
@@ -25,7 +25,7 @@ const parseCommitMessage = (commitMsg, commitHash, settings) => {
 
   result.body = body
   result.type = type || ""
-  result.release = breaking === "!" ? "major" : types[type]?.release || "none"
+  result.release = breaking === "!" ? "major" : types[type]?.release || "patch"
   result.scopes = scopesArray
 
   return result

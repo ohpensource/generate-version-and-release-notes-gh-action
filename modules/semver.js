@@ -22,19 +22,17 @@ function calculateNextVersion(version, changes) {
         newMinor = minor + 1;
         newPatch = 0;
         newSecondary = 0;
-    } else if (
-        changes.some((change) => change === "patch") ||
-        versionFileContent.length === 3
-    ) {
-        newMajor = major;
-        newMinor = minor;
-        newPatch = patch + 1;
-        newSecondary = 0;
-    } else {
-        newMajor = major;
-        newMinor = minor;
-        newPatch = patch;
-        newSecondary = secondary + 1;
+    } else if (changes.some((change) => change === 'patch')) {
+        if (versionFileContent.length === 3) {
+            newMajor = major
+            newMinor = minor
+            newPatch = patch + 1
+        } else {
+            newMajor = major
+            newMinor = minor
+            newPatch = patch
+            newSecondary = secondary + 1
+        }
     }
 
     if (versionFileContent.length === 3) {

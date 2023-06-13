@@ -83,12 +83,21 @@ scopes.forEach(scope => {
 
 if (!skipGitCommit) {
 
-    logger.logTitle("COMMITTING AND TAGGING");
+  logger.logTitle("COMMITTING AND TAGGING")
+
+  let tag
+  let commitMsg
+  let tagMsg
+  if (previousVersionRepo === newVersionRepo) {
+      commitMsg = '[skip ci] Changelog update - no version change'
+  } else {
     logger.logKeyValuePair("versionPrefix", versionPrefix)
     logger.logKeyValuePair("newVersion", newVersionRepo)
 
-    const tag = `${versionPrefix}${newVersionRepo}`
-    const commitMsg = `[skip ci] Bump to version ${tag}`
-    const tagMsg = `Tag for version ${tag}`
-    git.commitAndTag(commitMsg, tagMsg, tag)
+    tag = `${versionPrefix}${newVersionRepo}`
+    commitMsg = `[skip ci] Bump to version ${tag}`
+    tagMsg = `Tag for version ${tag}`
+  }
+
+  git.commitAndTag(commitMsg, tagMsg, tag)
 }
