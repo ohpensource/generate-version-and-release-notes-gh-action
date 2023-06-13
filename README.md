@@ -149,16 +149,16 @@ If no `conventionalCommits` are defined in the `settings-file`, the commit types
         "release": "none"
     },
     "style": {
-        "release": "none"
+        "release": "patch"
     },
     "refactor": {
-        "release": "none"
+        "release": "minor"
     },
     "perf": {
-        "release": "none"
+        "release": "minor"
     },
     "test": {
-        "release": "none"
+        "release": "patch"
     }
 }
 ```

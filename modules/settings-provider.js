@@ -24,16 +24,16 @@ const DEFAULT_CONVENTIONAL_COMMITS = {
         "release": "none"
     },
     "style": {
-        "release": "none"
+        "release": "patch"
     },
     "refactor": {
-        "release": "none"
+        "release": "minor"
     },
     "perf": {
-        "release": "none"
+        "release": "minor"
     },
     "test": {
-        "release": "none"
+        "release": "patch"
     }
 }
 
