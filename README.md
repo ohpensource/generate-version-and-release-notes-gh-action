@@ -60,6 +60,7 @@ The action will:
 - Summarize all the pull request changes into your `CHANGELOG.md` file.
 - Deduce the new version from the commits merged.
 - Commit, tag and push changes in version.json and CHANGELOG.md (you can skip this part by setting parameter _skip-git-commit_ to true, for example when you want to change more files and push changes in one commit by yourself)
+- If release is not needed, tagging will be skipped
 - You can also set up a name to sign the commit with the parameter: _user-name__. The default value is _GitHub Actions_
 - The action will, by default, use MAJOR.MINOR.PATCH semantics to generate version number, if you want to use MAJOR.MINOR.PATCH.SECONDARY versioning, the `version.json` file in the root of your project must have 4 numbers separated by dot. For new applications it can look like this:
 
@@ -165,10 +166,10 @@ If no `conventionalCommits` are defined in the `settings-file`, the commit types
 examples:
 
 - break: LANZ-123 updated API design-> creates a major release (**X+1**.y.z)
-- fix!: LANZ-123 fixed bug but breakign compatibility-> creates a major release (**X+1**.y.z)
+- fix!: LANZ-123 fixed bug but breaking compatibility-> creates a major release (**X+1**.y.z)
 - feat: LANZ-123 created new feature -> create sa minor release (x.**Y+1**.z)
 - fix: LANZ-123 fixed bug keeping compatibility-> creates a patch release (x.y.**Z+1**)
-- docs: LANZ-123 updated readme -> Increases **the latest number** in your version.json file.
+- docs: LANZ-123 updated readme -> Does not increase version in version.json file.
 
 Commit Examples:
 
