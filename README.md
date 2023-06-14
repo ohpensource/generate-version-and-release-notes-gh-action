@@ -49,6 +49,7 @@ jobs:
           version-prefix: "v"  # useful for repos that terraform modules where the versions are like "v0.2.4".
           settings-file: cicd/settings.json
           base-commit-sha: ${{ github.event.pull_request.base.sha || github.event.before }} # if project not use squash commits
+          always-increase-version: "false" # always increase version even if there are no application changes (i.e. documentation changes, build changed etc will also increase version), default is true
       - name: show new version
         run: |
           echo "version released: ${{ steps.semver.outputs.service-version }}"
@@ -75,6 +76,7 @@ The action will:
 > **skip-commit**: use it with value "true" if you want to prevent the action from committing.
 > **version-prefix**: use with a value different than an empty string ("beta-" or "v" for example) to have tags in the form of '{version-prefix}M.m.p'
 > **base-commit-sha**: if project not use squash commits or if plugin is used in pull_request workflows
+> **always-increase-version**: # always increase version even if there are no application changes (i.e. documentation changes, build changed etc will also increase version), default is true
 > **settings-file**: path to a JSON file where you can define your custom conventional commits and scopes. Next is an example:
 
 ```json
@@ -169,7 +171,7 @@ examples:
 - fix!: LANZ-123 fixed bug but breaking compatibility-> creates a major release (**X+1**.y.z)
 - feat: LANZ-123 created new feature -> create sa minor release (x.**Y+1**.z)
 - fix: LANZ-123 fixed bug keeping compatibility-> creates a patch release (x.y.**Z+1**)
-- docs: LANZ-123 updated readme -> Does not increase version in version.json file.
+- docs: LANZ-123 updated readme -> Does not increase version in version.json file if param always-increase-version is set to false, otherwise creates a patch release (x.y.**Z+1**).
 
 Commit Examples:
 
