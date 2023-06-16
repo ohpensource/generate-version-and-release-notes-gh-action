@@ -35,6 +35,11 @@ function calculateNextVersion(version, changes) {
             newPatch = patch
             newSecondary = secondary + 1
         }
+    } else {
+        newMajor = major
+        newMinor = minor
+        newPatch = patch
+        newSecondary = secondary
     }
 
     if (versionFileContent.length === 3) {
