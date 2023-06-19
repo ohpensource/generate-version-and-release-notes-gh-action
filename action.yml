@@ -22,8 +22,8 @@ inputs:
   base-commit-sha:
     description: "base commit hash"
     required: false
-  always-increase-version:
-    description: "always increase version even if there are no application changes (i.e. documentation changes, build changed etc will also increase version)"
+  increase-version-if-release-none:
+    description: "increase version application version also in the case when release type is resolved to none"
     required: false
     default: "true"
 
@@ -41,7 +41,7 @@ runs:
         VERSION_PREFIX: ${{ inputs.version-prefix }}
         SETTINGS_FILE: ${{ inputs.settings-file }}
         BASE_COMMIT_SHA: ${{ inputs.base-commit-sha }}
-        ALWAYS_INCREASE_VERSION: ${{ inputs.always-increase-version }}
+        INCREASE_VERSION_IF_RELEASE_NONE: ${{ inputs.increase-version-if-release-none }}
       run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}

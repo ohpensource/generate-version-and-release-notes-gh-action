@@ -1,5 +1,5 @@
 function calculateNextVersion(version, changes) {
-    const alwaysIncreaseVersion = process.env.ALWAYS_INCREASE_VERSION === 'true'
+    const increaseVersionIfReleaseNone = process.env.INCREASE_VERSION_IF_RELEASE_NONE === 'true'
 
     let versionFileContent = version.split(".");
     let major = parseInt(versionFileContent[0], 10);
@@ -24,7 +24,7 @@ function calculateNextVersion(version, changes) {
         newMinor = minor + 1;
         newPatch = 0;
         newSecondary = 0;
-    } else if (alwaysIncreaseVersion || changes.some((change) => change === 'patch')) {
+    } else if (increaseVersionIfReleaseNone || changes.some((change) => change === 'patch')) {
         if (versionFileContent.length === 3) {
             newMajor = major
             newMinor = minor
