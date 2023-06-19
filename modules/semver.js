@@ -1,4 +1,6 @@
 function calculateNextVersion(version, changes) {
+    const increaseVersionIfReleaseNone = process.env.INCREASE_VERSION_IF_RELEASE_NONE === 'true'
+
     let versionFileContent = version.split(".");
     let major = parseInt(versionFileContent[0], 10);
     let minor = parseInt(versionFileContent[1], 10);
@@ -22,19 +24,19 @@ function calculateNextVersion(version, changes) {
         newMinor = minor + 1;
         newPatch = 0;
         newSecondary = 0;
-    } else if (
-        changes.some((change) => change === "patch") ||
-        versionFileContent.length === 3
-    ) {
-        newMajor = major;
-        newMinor = minor;
-        newPatch = patch + 1;
-        newSecondary = 0;
+    } else if (increaseVersionIfReleaseNone || changes.some((change) => change === 'patch')) {
+        if (versionFileContent.length === 3) {
+            newMajor = major
+            newMinor = minor
+            newPatch = patch + 1
+        } else {
+            newMajor = major
+            newMinor = minor
+            newPatch = patch
+            newSecondary = secondary + 1
+        }
     } else {
-        newMajor = major;
-        newMinor = minor;
-        newPatch = patch;
-        newSecondary = secondary + 1;
+        return version;
     }
 
     if (versionFileContent.length === 3) {

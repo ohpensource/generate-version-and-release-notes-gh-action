@@ -1,3 +1,27 @@
+# :confetti_ball: 2.2.1 (2023-06-19T05:48:13.945Z)
+- - -
+## :newspaper: Others
+* ci: [CMM-21517](https://ohpen.atlassian.net/browse/CMM-21517) - reverted wrong version increase (#101)
+- - -
+- - -
+# :confetti_ball: 2.2.1 (2023-06-16T11:19:26.022Z)
+- - -
+## :newspaper: Others
+* ci: [CMM-21517](https://ohpen.atlassian.net/browse/CMM-21517) - reverted wrong version increase (#101)
+- - -
+- - -
+# :confetti_ball: 2.2.1 (2023-06-16T11:18:46.931Z)
+- - -
+## :newspaper: Others
+* ci: [CMM-21517](https://ohpen.atlassian.net/browse/CMM-21517) - reverted wrong version increase (#101)
+- - -
+- - -
+# :confetti_ball: 2.2.1 (2023-06-16T11:18:01.650Z)
+- - -
+## :newspaper: Others
+* ci: [CMM-21517](https://ohpen.atlassian.net/browse/CMM-21517) - reverted wrong version increase (#101)
+- - -
+- - -
 # :confetti_ball: 2.2.1 (2022-11-14T08:10:21.449Z)
 - - -
 ## :bug: Fixes

@@ -22,6 +22,10 @@ inputs:
   base-commit-sha:
     description: "base commit hash"
     required: false
+  increase-version-if-release-none:
+    description: "increase version application version also in the case when release type is resolved to none"
+    required: false
+    default: "true"
 
 outputs:
   service-version:
@@ -37,6 +41,7 @@ runs:
         VERSION_PREFIX: ${{ inputs.version-prefix }}
         SETTINGS_FILE: ${{ inputs.settings-file }}
         BASE_COMMIT_SHA: ${{ inputs.base-commit-sha }}
+        INCREASE_VERSION_IF_RELEASE_NONE: ${{ inputs.increase-version-if-release-none }}
       run: |
         git config user.email ${{ inputs.user-email }}
         git config user.name ${{ inputs.user-name }}
