@@ -1,3 +1,9 @@
+# :confetti_ball: 2.2.2 (2023-08-21T13:46:07.395Z)
+- - -
+## :bug: Fixes
+* fix: [LANZ-4125](https://ohpen.atlassian.net/browse/LANZ-4125) align regex used for parse commits with the ensure-conventional-commits-gh-action GH action (#34)
+- - -
+- - -
 # :confetti_ball: 2.2.1 (2022-11-14T08:10:21.449Z)
 - - -
 ## :bug: Fixes
